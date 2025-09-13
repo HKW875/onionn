@@ -423,11 +423,6 @@
     });
 
     btnLogin.addEventListener('click', ()=>{
-      const email = loginEmail.value.trim().toLowerCase();
-      const pass  = loginPass.value;
-      const user = store.users.find(u=>u.email===email && u.pass===pass);
-      if(!user) return alert('Invalid credentials');
-      store.session = { email:user.email, phone:user.phone };
       onLoggedIn();
     });
 
