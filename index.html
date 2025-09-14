@@ -330,6 +330,17 @@
       clearVerify(phone){ localStorage.removeItem('verify_'+phone) },
     };
 
+    // Assume you toggle "hidden" class to show/hide the section
+    document.getElementById("show-contact").addEventListener("click", function () {
+      const section = document.getElementById("tab-contact");
+      section.classList.remove("hidden"); // show the section
+
+    // Make sure the map resizes correctly
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 200); // small delay helps
+    });
+    
     /***********************
      * Demo seller data
      ***********************/
