@@ -227,6 +227,7 @@
 
       <div class="tabs">
         <button data-tab="new" class="tab active">New Order</button>
+        <button data-tab="new" class="tab">Track Order</button>
         <button data-tab="history" class="tab">History</button>
         <button data-tab="contact" class="tab">Contact</button>
       </div>
@@ -272,6 +273,23 @@
             <div class="helper">Need to change your number? Log out and update your account after we add profile editing.</div>
           </div>
         </div>
+      </section>
+
+      <!-- TRACK ORDER -->
+      <section id="tab-track-order" class="hidden">
+        <div class="card">
+          <!-- Leaflet (Free Map Provider: OpenStreetMap tiles) -->
+          <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""
+          />
+          <script
+          src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""
+          ></script>
       </section>
 
       <!-- HISTORY -->
