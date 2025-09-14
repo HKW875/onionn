@@ -19,6 +19,24 @@
   ></script>
 
   <style>
+    #trackOrderButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #2a9d8f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+
+    #trackOrderMap {
+      height: 340px;
+      border-radius:12px;
+      width: 100%;
+      margin-top: 20px;
+      border:1px solid var(--border);
+      display: none; /* hidden until button is clicked */
+    }
     :root{
       --brand:#1f2937; /* dark blue/black */
       --brand-dark:#0f7c36;
@@ -233,6 +251,34 @@
 
       </div>
 
+      <button id="trackOrderButton" onclick="showTrackOrderMap()">Track Order</button>
+
+      <div id="trackOrderMap"></div>
+
+      <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+      <script>
+        let trackOrderMap; // variable to store the map instance
+
+        function showTrackOrderMap() {
+        const trackOrderMapDiv = document.getElementById("trackOrderMap");
+        trackOrderMapDiv.style.display = "block"; // make map visible
+
+        if (!trackOrderMap) { 
+          // initialize the map only once
+          trackOrderMap =L.map("trackOrderMap").setView([0.0236, 37.9062], 6); // Kenya center
+
+          // add OpenStreetMap tiles
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+          }).addTo(trackOrderMap);
+
+          // add a marker (example: Nairobi)
+          L.marker([-1.2921, 36.8219]).addTo(trackOrderMap)
+            .bindPopup("<b>Hello!</b><br>Nairobi, Kenya")
+            .openPopup();
+       }
+     }
+  </script>
       <!-- NEW ORDER -->
       <section id="tab-new">
         <div class="two-col">
@@ -275,7 +321,15 @@
           </div>
         </div>
       </section>
-
+      
+      <!-- TRACK ORDER -->
+      <section id="tab-track" class="hidden">
+        <div class="card">
+          <p><strong>Order Tracking and Delivery</strong></p>
+          <p class="muted">Email: support@onionn.africa<br/>Phone/Whatsapp +254000000000</p>
+          <p class="helper">For payments and delivery issues, contact your selected seller directly. Their phone is shown in your order.</p>
+        </div>
+      </section>
 
       <!-- HISTORY -->
       <section id="tab-history" class="hidden">
