@@ -253,30 +253,30 @@
 
       <div id="trackOrderMap"></div>
 
-      <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-      <script>
-        let trackOrderMap; // variable to store the map instance
+       <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+       <script>
+         let trackOrderMap; // variable to store the map instance
 
-        function showTrackOrderMap() {
-        const trackOrderMapDiv = document.getElementById("trackOrderMap");
-        trackOrderMapDiv.style.display = "block"; // make map visible
+         function showTrackOrderMap() {
+         const trackOrderMapDiv = document.getElementById("trackOrderMap");
+         trackOrderMapDiv.style.display = "block"; // make map visible
 
-        if (!trackOrderMap) { 
-          // initialize the map only once
-          trackOrderMap =L.map("trackOrderMap").setView([0.0236, 37.9062], 6); // Kenya center
+         if (!trackOrderMap) { 
+           // initialize the map only once
+           trackOrderMap =L.map("trackOrderMap").setView([0.0236, 37.9062], 6); // Kenya center
 
-          // add OpenStreetMap tiles
-          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-          }).addTo(trackOrderMap);
+           // add OpenStreetMap tiles
+           L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+           attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+           }).addTo(trackOrderMap);
 
-          // add a marker (example: Nairobi)
-          L.marker([-1.2921, 36.8219]).addTo(trackOrderMap)
-            .bindPopup("<b>Hello!</b><br>Nairobi, Kenya")
-            .openPopup();
-       }
-     }
-  </script>
+           // add a marker (example: Nairobi)
+           L.marker([-1.2921, 36.8219]).addTo(trackOrderMap)
+             .bindPopup("<b>Hello!</b><br>Nairobi, Kenya")
+             .openPopup();
+          }
+        }
+      </script>
       <!-- NEW ORDER -->
       <section id="tab-new">
         <div class="two-col">
