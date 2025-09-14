@@ -245,15 +245,14 @@
 
       <div class="tabs">
         <button data-tab="new" class="tab active">New Order</button>
-        <button id="trackOrderButton" onclick="showTrackOrderMap()">Track Order</button>
+        <button data-tab="track-order" class="tab"id="trackOrderButton" onclick="showTrackOrderMap()">Track Order</button>      
         <button data-tab="history" class="tab">History</button>
         <button data-tab="contact" class="tab">Contact</button>
 
       </div>
 
       <div id="trackOrderMap"></div>
-
-       <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+      <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
        <script>
          let trackOrderMap; // variable to store the map instance
 
