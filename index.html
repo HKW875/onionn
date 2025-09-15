@@ -383,8 +383,8 @@
     
     document.addEventListener("DOMContentLoaded", () => {
       // Retrieve values from localStorage
-      const storedName  = localStorage.getItem("currentUser.name"); 
-      const storedPhone = localStorage.getItem("phone");
+      const storedName  = JSON.parse(localStorage.getItem("currentUser.name")); 
+      const storedPhone = JSON.parse(localStorage.getItem("currentUser.phone"));
 
       // Target spans
       const nameSpan    = document.getElementById("name");
