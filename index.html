@@ -283,10 +283,33 @@
             <div class="footnote">After you choose a payment option, your order is sent to the seller and you can track delivery.</div>
           </div>
 
+
+          
           <div>
             <div class="card">
               <strong>Order summary</strong>
               <div class="list">
+              <script>
+                // Get stored user object from localStorage
+                const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+                // Check if user exists before filling
+                if (currentUser) {
+                  // Fill the Name field
+                  const nameEl = document.getElementById("name");
+                  if (nameEl && currentUser.name) {
+                    nameEl.textContent = currentUser.name;
+                  }
+
+                  // Fill the Phone field
+                  const phoneEl = document.getElementById("summaryPhone");
+                  if (phoneEl && currentUser.phone) {
+                    phoneEl.textContent = currentUser.phone;
+                  }
+                }
+              </script>
+
+                
                 <div><span class="muted">Name:</span> <span id="name"></span></div>
                 <div><span class="muted">Quantity:</span> <span id="orderQuantity">—</span></div>
                 <div><span class="muted">Unit price:</span> KSh <strong>60</strong> / kg</div>
