@@ -364,12 +364,15 @@
       getVerify(phone){ return localStorage.getItem('verify_'+phone) },
       clearVerify(phone){ localStorage.removeItem('verify_'+phone) },
     };
-
+    
+    /***********************
+     * Filling out order summary"
+     ***********************/
     
     document.addEventListener("DOMContentLoaded", () => {
       // Retrieve values from localStorage
-      const storedName  = localStorage.getItem("Name"); 
-      const storedPhone = localStorage.getItem("regPhone");
+      const storedName  = localStorage.getItem("regName"); 
+      const storedPhone = localStorage.getItem("phone");
 
       // Target spans
       const nameSpan    = document.getElementById("name");
