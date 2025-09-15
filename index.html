@@ -488,8 +488,44 @@
       regPass.value = '';
     });
 
-    btnLogin.addEventListener('click', ()=>{
-      onLoggedIn();
+    // Same helper from before
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
+    }
+
+    btnLogin.addEventListener('click', async ()=>{
+      const email = loginEmail.value.trim().toLowerCase();
+      const pass  = loginPass.value;
+
+      if(!email || !pass) return alert('Please enter email and password');
+
+      // Get users from localStorage
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+
+      // Find user by email
+      const user = users.find(u => u.email === email);
+      if(!user) return alert('No account found with this email');
+
+      // Hash entered password
+      const hashedPass = await hashPassword(pass);
+
+      // Compare hashes
+      if(user.pass === hashedPass) {
+        alert('Login successful!');
+        // Optional: mark user as logged in
+        localStorage.setItem('currentUser', JSON.stringify(user));
+      } else {
+        alert('Incorrect password');
+      }
+
+      // Clear form fields
+      loginEmail.value = '';
+      loginPass.value = '';
     });
 
     function onLoggedIn(){
