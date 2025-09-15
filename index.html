@@ -369,6 +369,18 @@
      * Filling out order summary"
      ***********************/
     
+
+
+    // Get the saved user from localStorage
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    // Check if user exists and has a name
+    if (currentUser && currentUser.name) {
+      document.getElementById("name").textContent = currentUser.name;
+    }
+    
+    
+    
     document.addEventListener("DOMContentLoaded", () => {
       // Retrieve values from localStorage
       const storedName  = localStorage.getItem("currentUser.name"); 
