@@ -431,14 +431,6 @@
       const users = store.users;
       if(users.find(u=>u.email===email)) return alert('Email already registered');
       // Create pending user (unverified)
-      const code = (''+Math.floor(100000+Math.random()*900000));
-      store.setVerify(phone, code);
-
-      // BACKEND NEEDED: Replace this alert with your SMS send:
-      // await fetch('/api/sms/send', {method:'POST', body: JSON.stringify({to: phone, message:`Your onionAI code is ${code}`})})
-      alert(`Demo: SMS code to ${phone}: ${code}`);
-
-      verifyBox.classList.remove('hidden');
     });
 
     btnVerify.addEventListener('click', ()=>{
