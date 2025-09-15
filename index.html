@@ -504,7 +504,7 @@
       const email = regEmail.value.trim().toLowerCase();
       const phone = cleanPhone(regPhone.value.trim());
       const pass  = regPass.value;
-      if(!email || !phone || !pass) return alert('Please fill all fields');
+      if(!name || !email || !phone || !pass) return alert('Please fill all fields');
       if(!/^07\d{8}$/.test(phone) && !/^\+2547\d{8}$/.test(phone)) {
         return alert('Enter a Safaricom number like 07XXXXXXXX');
       }
@@ -527,8 +527,9 @@
       const email = regEmail.value.trim().toLowerCase();
       const phone = cleanPhone(regPhone.value.trim());
       const pass  = regPass.value;
+      const name  = regName.value;
 
-      if(!email || !phone || !pass) return alert('Please fill all fields');
+      if(!name || !email || !phone || !pass) return alert('Please fill all fields');
 
       if(!/^07\d{8}$/.test(phone) && !/^\+2547\d{8}$/.test(phone)) {
         return alert('Enter a Safaricom number like 07XXXXXXXX');
@@ -551,7 +552,7 @@
       const hashedPass = await hashPassword(pass);
 
       // Create new user object with hashed password
-      const newUser = { email, phone, pass: hashedPass };
+      const newUser = { name, email, phone, pass: hashedPass };
 
       // Add new user to users array
       users.push(newUser);
@@ -563,6 +564,7 @@
       alert('Account successfully created!');
   
       // Optional: clear form fields
+      regName.value = '';
       regEmail.value = '';
       regPhone.value = '';
       regPass.value = '';
