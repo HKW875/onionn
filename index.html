@@ -433,19 +433,59 @@
       // Create pending user (unverified)
     });
 
-    btnVerify.addEventListener('click', ()=>{
+    // Helper: hash password using SHA-256
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
+    }
+
+    btnCreate.addEventListener('click', async ()=>{
       const email = regEmail.value.trim().toLowerCase();
       const phone = cleanPhone(regPhone.value.trim());
       const pass  = regPass.value;
-      const code  = verifyCode.value.trim();
-      const expected = store.getVerify(phone);
-      if(code !== expected) return alert('Incorrect code');
-      const users = store.users;
-      users.push({ email, phone: normalizeTo254(phone), pass });
-      store.users = users;
-      store.clearVerify(phone);
-      store.session = { email, phone: normalizeTo254(phone) };
-      onLoggedIn();
+
+      if(!email || !phone || !pass) return alert('Please fill all fields');
+
+      if(!/^07\d{8}$/.test(phone) && !/^\+2547\d{8}$/.test(phone)) {
+        return alert('Enter a Safaricom number like 07XXXXXXXX');
+      }
+
+      // Get users from localStorage, or empty array if none
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+
+      // Check if email already exists
+      if(users.find(u => u.email === email)) {
+        return alert('Email already registered');
+      }
+
+      // Check if phone already exists
+      if(users.find(u => u.phone === phone)) {
+        return alert('Phone number already registered');
+      }
+
+      // Hash the password before storing
+      const hashedPass = await hashPassword(pass);
+
+      // Create new user object with hashed password
+      const newUser = { email, phone, pass: hashedPass };
+
+      // Add new user to users array
+      users.push(newUser);
+
+      // Save updated users list back to localStorage
+      localStorage.setItem('users', JSON.stringify(users));
+
+      // Confirmation message
+      alert('Account successfully created!');
+  
+      // Optional: clear form fields
+      regEmail.value = '';
+      regPhone.value = '';
+      regPass.value = '';
     });
 
     btnLogin.addEventListener('click', ()=>{
