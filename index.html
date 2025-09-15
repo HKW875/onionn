@@ -375,9 +375,12 @@
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     // Check if user exists and has a name
-    if (currentUser && currentUser.name) {
-      document.getElementById("name").textContent = currentUser.name;
-    }
+    if (currentUser) {
+    // Fill the Name field
+      const nameEl = document.getElementById("name");
+      if (nameEl && currentUser.name) {
+        nameEl.textContent = currentUser.name;
+      }
     
     
     
