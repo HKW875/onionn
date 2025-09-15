@@ -374,6 +374,22 @@
     // Get the saved user from localStorage
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     
+
+    // Check if user exists before filling
+    if (currentUser) {
+      // Fill the Name field
+      const nameEl = document.getElementById("name");
+      if (nameEl && currentUser.name) {
+        nameEl.textContent = currentUser.name;
+      }
+
+      // Fill the Phone field
+      const phoneEl = document.getElementById("summaryPhone");
+      if (phoneEl && currentUser.phone) {
+        phoneEl.textContent = currentUser.phone;
+      }
+    }
+
     
     
     document.addEventListener("DOMContentLoaded", () => {
