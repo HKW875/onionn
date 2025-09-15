@@ -504,6 +504,7 @@
       const email = regEmail.value.trim().toLowerCase();
       const phone = cleanPhone(regPhone.value.trim());
       const pass  = regPass.value;
+      const name  = regName.value;
       if(!name || !email || !phone || !pass) return alert('Please fill all fields');
       if(!/^07\d{8}$/.test(phone) && !/^\+2547\d{8}$/.test(phone)) {
         return alert('Enter a Safaricom number like 07XXXXXXXX');
