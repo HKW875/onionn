@@ -368,15 +368,30 @@
     /***********************
      * Filling out order summary"
      ***********************/
+    // Show user info if logged in
+    function displayUserInfo() {
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
 
+      if (isLoggedIn === "true") {
+        const name = localStorage.getItem("name");
+        const phone = localStorage.getItem("phone");
+
+        document.getElementById("name").textContent = name || "";
+        document.getElementById("phone").textContent = phone || "";
+      } else {
+        document.getElementById("name").textContent = "";
+        document.getElementById("phone").textContent = "";
+      }
+    }
+
+
+    
     // Run on page load
     document.addEventListener("DOMContentLoaded", displayUserInfo);
-
 
     // Get the saved user from localStorage
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     
-
     // Check if user exists before filling
     if (currentUser) {
       // Fill the Name field
