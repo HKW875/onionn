@@ -19,23 +19,7 @@
   ></script>
 
   <style>
-    #trackOrderButton {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background: white;
-      color: black;
-      border-radius: 8px;
-    }
 
-    #trackOrderMap {
-      height: 340px;
-      border-radius:12px;
-      width: 100%;
-      margin-top: 20px;
-      border:1px solid var(--border);
-      display: none; /* hidden until button is clicked */
-    }
     :root{
       --brand:#1f2937; /* dark blue/black */
       --brand-dark:#0f7c36;
@@ -247,7 +231,6 @@
       <div class="tabs">
         <button data-tab="new" class="tab active">New Order</button>
         <button data-tab="contact" class="tab">Contact</button>
-
       </div>
 
       
@@ -256,9 +239,7 @@
         <div class="two-col">
           <div>
             <label>Choose seller</label>
-            <select id="sellerSelect"></select>
-              
-            
+            <select id="sellerSelect"></select>                          
             <div class="row">
               <div>
                 <label>Quantity (kg)</label>
@@ -271,8 +252,7 @@
             </div>
 
             <label>Delivery notes (optional)</label>
-            <textarea id="notes" rows="3" placeholder="Estate name, landmarks, delivery time…"></textarea>
-            
+            <textarea id="notes" rows="3" placeholder="Estate name, landmarks, delivery time…"></textarea>            
             <label>Choose option, and click to submit order</label>
             <div class="row">
               <button id="btnPayNow" class="btn">Pay Now (M-Pesa)</button>
