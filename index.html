@@ -234,6 +234,43 @@
       <!-- NEW ORDER -->
       <section id="tab-new">
        <div class="two-col">
+        <!-- Order form -->
+        <div class="card">
+          <h2>Make an order</h2>
+
+          <label for="qty">Quantity (Kg)</label>
+          <input id="qty" type="number" min="0.5" step="0.5" value="1" />
+
+          <label for="paymentMode">Payment method</label>
+          <select id="paymentMode">
+            <option value="mpesa">M-Pesa</option>
+            <option value="cod">Payment on delivery</option>
+          </select>
+
+          <div class="row">
+            <div>
+              <label>Price per Kg</label>
+              <div class="pill">60 Ksh / Kg</div>
+            </div>
+            <div>
+              <label>Total</label>
+              <div id="total" class="pill">60.00 Ksh</div>
+            </div>
+          </div>
+
+          <label>Location (detected)</label>
+          <div id="locationStatus" class="helper">Click "Detect my location" to fill coordinates</div>
+          <div class="row">
+            <button id="detectBtn" class="btn ghost">Detect my location</button>
+            <button id="placeOrderBtn" class="btn">Place order</button>
+          </div>
+
+          <div class="footnote">Tip: If you choose payment on delivery, we'll prepare an SMS + email to the seller with your order details.</div>
+        </div>
+
+
+
+         
           <div>            
             <select id="sellerSelect"></select>                          
             <div class="row">
