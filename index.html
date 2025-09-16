@@ -226,7 +226,91 @@
           <button id="btnLogout" class="btn ghost">Log out</button>
         </div>
       </div>
+      <div class="tabs">
+        <button data-tab="new" class="tab active">New Order</button>
+        <button data-tab="contact" class="tab">Contact</button>
+      </div>
+
+      
+      <!-- NEW ORDER -->
+      <section id="tab-new">
+        <div class="two-col">
+          <div>
+            <label>Choose seller</label>
+            <select id="sellerSelect"></select>                          
+            <div class="row">
+              <div>
+                <label>Quantity (kg)</label>
+                <input id="qty" type="number" min="1" step="1" value="10" />
+              </div>
+              <div>
+                <label>Total (KSh @ 60/kg)</label>
+                <input id="total" type="text" value="600" readonly />
+              </div>
+            </div>
+
+            <label>Delivery notes (optional)</label>
+            <textarea id="notes" rows="3" placeholder="Estate name, landmarks, delivery time…"></textarea>            
+            <label>Choose option, and click to submit order</label>
+            <div class="row">
+              <button id="btnPayNow" class="btn">Pay Now (M-Pesa)</button>
+              <button id="btnPayOnDelivery" class="btn secondary">Pay on Delivery</button>
+            </div>
+            <div class="footnote">After you choose a payment option, your order is sent to the seller and you can track delivery.</div>
+          </div>
+          
+          <div>
+            <div class="card">
+              <strong>Order summary</strong>
+              <div class="list">                                
+                <div><span class="muted">Name:</span> <span id="name"></span></div>
+                <div><span class="muted">Quantity:</span> <span id="orderQuantity">—</span></div>
+                <div><span class="muted">Unit price:</span> KSh <strong>60</strong> / kg</div>
+                <div><span class="muted">Your phone:</span> <span id="summaryPhone"> </span></div>
+                <div><span class="muted">Location:</span> <span id="fromGeoLocation">—</span></div>
+                <div><span class="muted">Order time:</span> <span id="orderTime">—</span></div>
+                <div><span class="muted">Status:</span> <span id="summaryStatus" class="pill">Draft</span></div>
+              </div>
+            </div>
+            <div class="helper">Need to change your number? Log out and update your account after we add profile editing.</div>
+          </div>
         
+        </div>
+      </section>
+
+      <!-- HISTORY -->
+      <section id="tab-history" class="hidden">
+        <div class="list" id="historyList"></div>
+        <div class="helper">Orders are stored locally for demo. Hook to your backend to persist.</div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="tab-contact" class="hidden">
+        <div class="card">
+          <p><strong>Onionn Support</strong></p>
+          <p class="muted">Email: support@onionn.africa<br/>Phone/Whatsapp +254000000000</p>
+          <p class="helper">For payments and delivery issues, contact your selected seller directly. Their phone is shown in your order.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- PAYMENT MODAL -->
+  <div id="paymentModal" class="modal-backdrop">
+    <div class="modal">
+      <h3>Pay Now via M-Pesa STK</h3>
+      <label>Phone to charge</label>
+      <input id="stkPhone" type="tel" />
+      <label>Amount (KSh)</label>
+      <input id="stkAmount" type="text" readonly />
+      <div class="row">
+        <button id="btnStartStk" class="btn">Request STK</button>
+        <button id="btnCancelStk" class="btn ghost">Cancel</button>
+      </div>
+      <div id="stkStatus" class="helper" style="margin-top:8px"></div>
+    </div>
+  </div>
+
       </div>
     </div>
 
