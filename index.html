@@ -234,8 +234,28 @@
       <!-- NEW ORDER -->
       <section id="tab-new">
        <div class="two-col">
+          <div>
+            <label>Choose seller</label>
+            <select id="sellerSelect"></select>                          
+            <div class="row">
+              <div>
+                <label>Quantity (kg)</label>
+                <input id="qty" type="number" min="1" step="1" value="10" />
+              </div>
+              <div>
+                <label>Total (KSh @ 60/kg)</label>
+                <input id="total" type="text" value="600" readonly />
+              </div>
+            </div>
 
-
+            <label>Delivery notes (optional)</label>
+            <textarea id="notes" rows="3" placeholder="Estate name, landmarks, delivery time…"></textarea>            
+            <label>Choose option, and click to submit order</label>
+            <div class="row">
+              <button id="btnPayNow" class="btn">Pay Now (M-Pesa)</button>
+              <button id="btnPayOnDelivery" class="btn secondary">Pay on Delivery</button>
+            </div>
+            <div class="footnote">After you choose a payment option, your order is sent to the seller and you can track delivery.</div>
 
        </div>
           <div>
