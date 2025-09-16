@@ -226,65 +226,6 @@
           <button id="btnLogout" class="btn ghost">Log out</button>
         </div>
       </div>
-
-      <div class="tabs">
-      <div id="appContent" class="hidden">
-        <div class="two-col">
-          <!-- Order form -->
-          <div class="card">
-            <h2>Make an order</h2>
-
-            <label for="qty">Quantity (Kg)</label>
-            <input id="qty" type="number" min="0.5" step="0.5" value="1" />
-
-            <label for="paymentMode">Payment method</label>
-            <select id="paymentMode">
-              <option value="mpesa">M-Pesa</option>
-              <option value="cod">Payment on delivery</option>
-            </select>
-
-            <div class="row">
-              <div>
-                <label>Price per Kg</label>
-                <div class="pill">60 Ksh / Kg</div>
-              </div>
-              <div>
-                <label>Total</label>
-                <div id="total" class="pill">60.00 Ksh</div>
-              </div>
-            </div>
-
-            <label>Location (detected)</label>
-            <div id="locationStatus" class="helper">Click "Detect my location" to fill coordinates</div>
-            <div class="row">
-              <button id="detectBtn" class="btn ghost">Detect my location</button>
-              <button id="placeOrderBtn" class="btn">Place order</button>
-            </div>
-
-            <div class="footnote">Tip: If you choose payment on delivery, we'll prepare an SMS + email to the seller with your order details.</div>
-          </div>
-
-          <!-- Summary -->
-          <div class="card">
-            <h2>Order Summary</h2>
-            <div class="list">
-              <div class="order-item"><span class="muted">Name:</span> <strong id="summaryName">—</strong></div>
-              <div class="order-item"><span class="muted">Phone:</span> <strong id="summaryPhone">—</strong></div>
-              <div class="order-item"><span class="muted">Quantity:</span> <strong id="summaryQty">—</strong> <span class="pill">Kg</span></div>
-              <div class="order-item"><span class="muted">Payment:</span> <strong id="summaryPayment">—</strong></div>
-              <div class="order-item"><span class="muted">Total:</span> <strong id="summaryTotal">—</strong></div>
-              <div class="order-item"><span class="muted">Order time:</span> <strong id="summaryTime">—</strong></div>
-              <div class="order-item"><span class="muted">Location:</span> <div id="summaryLocation">No location yet</div></div>
-            </div>
-
-            <div class="seller-box">
-              <div class="seller-pill"><strong>Seller:</strong> Onionn</div>
-              <div class="seller-pill"><strong>Email:</strong> <span id="sellerEmail">seller@example.com</span></div>
-              <div class="seller-pill"><strong>Phone:</strong> <span id="sellerPhone">+254700000000</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
         
       </div>
     </div>
