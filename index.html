@@ -596,7 +596,7 @@
         `Total price: ${total} Ksh`,
         `Payment method: ${payment === 'mpesa' ? ('M-Pesa (' + mpesaT + (mpesaT==='other' ? (': '+mpesaNum) : '') +')') : 'Payment on delivery'}`,
         account ? `Payment account: ${account}` : '',
-      ].filter(Boolean).join('\\n');
+      ].filter(Boolean).join('');
 
       summaryBox.textContent = summary;
       return summary;
