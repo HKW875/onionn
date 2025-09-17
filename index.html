@@ -1,22 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>onionn</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Onionn — Order Onions</title>
 
-  <!-- Leaflet (Free Map Provider: OpenStreetMap tiles) -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-  ></script>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 
   <style>
 
@@ -162,457 +152,538 @@
     .seller-pill{
       border:1px solid var(--border);border-radius:8px;padding:6px 10px;background:#fff
     }
+
+    /* small extras */
+    .topbar{
+      position:sticky;top:0;z-index:40;background:transparent;padding:12px;display:flex;justify-content:flex-end;gap:12px;
+    }
+    #logoutBtn{display:none}
+    .order-section{margin-top:12px}
+    .summary{white-space:pre-wrap;background:#f8fafc;padding:12px;border-radius:10px;border:1px dashed var(--border)}
+    .partners-hidden{display:none}
+    .partner-btn{margin-top:12px}
+    .small{font-size:13px}
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">
-      <span class="mark">🧅</span> Onionn
+    <div class="logo" aria-label="Onionn logo">
+      <div class="mark">O</div>
+      <div>Onionn</div>
     </div>
   </header>
 
-  <div class="container">
-    <!-- MAP + SELLER LOCATIONS (always visible on auth screen) -->
-    <div class="card">
-      <h2>Order onions online. Free same day delivery.</h2>
-      <h2>📱Order online 🚚 Track delivery 💵 Earn points</h2>
+  <div class="topbar container">
+    <button id="logoutBtn" class="btn secondary">Logout</button>
+  </div>
+
+  <main class="container">
+    <!-- MAP CARD (visible before login) -->
+    <div id="mapCard" class="card">
       <div id="map"></div>
-      <div class="helper">Tip: Pinch or scroll to zoom. If you allow location, the map will focus near you and show sellers nearby.</div>
-      <div id="sellerChips" class="seller-box"></div>
     </div>
 
-    <!-- AUTH CARD -->
-    <div id="authCard" class="card">
-      <div class="two-col">
-        <!-- Create Account -->
-        <div>
-          <h2>Create Account</h2>
-          <label>Name</label>
-          <input id="regName" type="name" placeholder="your name" />
-          <label>Email</label>
-          <input id="regEmail" type="email" placeholder="you@example.com" />
-          <label>Phone</label>
-          <input id="regPhone" type="tel" placeholder="07XXXXXXXX" />
-          <label>Password</label>
-          <input id="regPass" type="password" placeholder="••••••••" />
-          <button id="btnCreate" class="btn">Create account</button>
+    <!-- Create Account + Login sections (two separate sections; only one button each) -->
+    <div id="authArea" class="two-col card" style="margin-top:12px;">
+      <!-- Create Account -->
+      <div id="createAccountCard">
+        <h2>Create account</h2>
+        <label for="ca_name">Full name</label>
+        <input id="ca_name" type="text" placeholder="Your name" />
+        <label for="ca_email">Email</label>
+        <input id="ca_email" type="email" placeholder="you@example.com" />
+        <label for="ca_phone">Phone</label>
+        <input id="ca_phone" type="tel" placeholder="+2547xxxxxxxx" />
+        <label for="ca_password">Password</label>
+        <input id="ca_password" type="password" placeholder="Choose a password" />
+        <button id="createAccountBtn" class="btn">Create Account</button>
+        <div id="createMsg" class="helper"></div>
+      </div>
 
-          <!-- Verification step -->
-          <div id="verifyBox" class="hidden">
-            <label>Enter verification code (sent to your phone)</label>
-            <input id="verifyCode" type="text" inputmode="numeric" placeholder="6-digit code" />
-            <button id="btnVerify" class="btn">Verify & Continue</button>
-            <div class="helper">Demo: We simulate SMS. In production, this will be an actual SMS code.</div>
-          </div>
-        </div>
-
-        <!-- Login -->
-        <div>
-          <h2>Login</h2>
-          <label>Email</label>
-          <input id="loginEmail" type="email" placeholder="you@example.com" />
-          <label>Password</label>
-          <input id="loginPass" type="password" placeholder="••••••••" />
-          <button id="btnLogin" class="btn secondary">Log in</button>
-        </div>
+      <!-- Login -->
+      <div id="loginCard">
+        <h2>Login</h2>
+        <label for="li_email">Email</label>
+        <input id="li_email" type="email" placeholder="you@example.com" />
+        <label for="li_password">Password</label>
+        <input id="li_password" type="password" placeholder="Your password" />
+        <button id="loginBtn" class="btn">Login</button>
+        <div id="loginMsg" class="helper"></div>
       </div>
     </div>
 
-    <!-- APP (visible after login) -->
-    <div id="appCard" class="card hidden">
-      <div class="row" style="align-items:center">
-        <div><h2>Welcome, <span id="welcomeName"></span> <span class="tag">KSh 60 / kg</span></h2></div>
-        <div class="right-actions">
-          <button id="btnLogout" class="btn ghost">Log out</button>
-        </div>
-      </div>
-      <div class="tabs">
-
-      </div>
-
-      
-      <!-- NEW ORDER -->
-      <section id="tab-new">
-       <div class="two-col">
-        <!-- Order form -->
-        <div class="card">
-          <h2>Make an order</h2>
-
+    <!-- Order Section (hidden before login) -->
+    <div id="orderArea" class="card hidden">
+      <div class="row">
+        <div>
+          <h2>Order onions (60 Ksh / Kg)</h2>
           <label for="qty">Quantity (Kg)</label>
-          <input id="qty" type="number" min="0.5" step="0.5" value="1" />
+          <input id="qty" type="number" min="1" value="1" />
+          <label>Delivery location</label>
+          <div class="row" style="grid-template-columns:1fr 1fr;">
+            <button id="useGeoBtn" class="btn ghost">Use my geolocation</button>
+            <button id="manualBtn" class="btn ghost">Enter manually</button>
+          </div>
+          <div id="manualWrap" class="hidden">
+            <label for="manualLocation">Manual delivery location</label>
+            <input id="manualLocation" placeholder="Address or description"/>
+          </div>
 
-          <label for="paymentMode">Payment method</label>
+          <label>Payment method</label>
           <select id="paymentMode">
             <option value="mpesa">M-Pesa</option>
-            <option value="cod">Payment on delivery</option>
+            <option value="pod">Payment on delivery</option>
           </select>
 
-          <div class="row">
-            <div>
-              <label>Price per Kg</label>
-              <div class="pill">60 Ksh / Kg</div>
+          <div id="mpesaOptions" class="hidden">
+            <label for="mpesaType">M-Pesa type</label>
+            <select id="mpesaType">
+              <option value="paybill">Paybill</option>
+              <option value="till">Till</option>
+              <option value="other">Other (enter)</option>
+            </select>
+            <div id="mpesaCustomWrap" class="hidden">
+              <label for="mpesaNumber">Paybill / Till Number</label>
+              <input id="mpesaNumber" placeholder="e.g. 123456 or Till number"/>
             </div>
-            <div>
-              <label>Total</label>
-              <div id="total" class="pill">60.00 Ksh</div>
-            </div>
+            <label for="mpesaAccount">Account / Business Name (optional)</label>
+            <input id="mpesaAccount" placeholder="Account name"/>
           </div>
 
-          <label>Location (detected)</label>
-          <div id="locationStatus" class="helper">Click "Detect my location" to fill coordinates</div>
-          <div class="row">
-            <button id="detectBtn" class="btn ghost">Detect my location</button>
-            <button id="placeOrderBtn" class="btn">Place order</button>
-          </div>
-
-          <div class="footnote">Tip: If you choose payment on delivery, we'll prepare an SMS + email to the seller with your order details.</div>
-        </div>
-
-
-
-         
-          <div>            
-            <select id="sellerSelect"></select>                          
-            <div class="row">
-              <div>               
-               <input id="qty" type="number" min="1" step="1" value="10" />
-              </div>
-              <div>                
-                
-              </div>
-            </div>            
-                                   
-            <div class="row">
-            </div>            
-          </div>        
-         
-        <!-- Summary -->
-        <div class="card">
-          <h2>Order Summary</h2>
-          <div class="list">
-            <div class="order-item"><span class="muted">Name:</span> <strong id="summaryName">—</strong></div>
-            <div class="order-item"><span class="muted">Phone:</span> <strong id="summaryPhone">—</strong></div>
-            <div class="order-item"><span class="muted">Quantity:</span> <strong id="summaryQty">—</strong> <span class="pill">Kg</span></div>
-            <div class="order-item"><span class="muted">Payment:</span> <strong id="summaryPayment">—</strong></div>
-            <div class="order-item"><span class="muted">Total:</span> <strong id="summaryTotal">—</strong></div>
-            <div class="order-item"><span class="muted">Order time:</span> <strong id="summaryTime">—</strong></div>
-            <div class="order-item"><span class="muted">Location:</span> <div id="summaryLocation">No location yet</div></div>
-          </div>
-
-          <div class="seller-box">
-            <div class="seller-pill"><strong>Seller:</strong> Onionn</div>
-            <div class="seller-pill"><strong>Email:</strong> <span id="sellerEmail">seller@example.com</span></div>
-            <div class="seller-pill"><strong>Phone:</strong> <span id="sellerPhone">+254700000000</span></div>
+          <div style="display:flex;gap:8px;">
+            <button id="previewBtn" class="btn">Preview Order</button>
+            <button id="partnerBtn" class="btn ghost partner-btn">Become a Partner</button>
           </div>
         </div>
-        
-       </div>
-      </section>
 
-      <!-- HISTORY -->
-      <section id="tab-history" class="hidden">
-        <div class="list" id="historyList"></div>
-        <div class="helper">Orders are stored locally for demo. Hook to your backend to persist.</div>
-      </section>
+        <div>
+          <h2>Order summary</h2>
+          <div id="summaryBox" class="summary small">No summary yet.</div>
+          <div class="footnote">
+            <div class="muted">You must select delivery location (geolocation or manual) before submitting.</div>
+          </div>
 
-      <!-- CONTACT -->
-      <section id="tab-contact" class="hidden">
-        <div class="card">
-          <p><strong>Onionn Support</strong></p>
-          <p class="muted">Email: support@onionn.africa<br/>Phone/Whatsapp +254000000000</p>
-          <p class="helper">For payments and delivery issues, contact your selected seller directly. Their phone is shown in your order.</p>
+          <div style="margin-top:12px;">
+            <button id="submitOrderBtn" class="btn secondary">Submit Order</button>
+          </div>
+
+          <div class="footnote" style="margin-top:12px;">
+            <div class="muted">Orders are sent to the seller via SMS on mobile, or email on desktop/tablet.</div>
+          </div>
         </div>
-      </section>
+      </div>
     </div>
-  </div>
 
-  <!-- PAYMENT MODAL -->
-  <div id="paymentModal" class="modal-backdrop">
+  </main>
+
+  <!-- Partner modal / area -->
+  <div id="partnerBackdrop" class="modal-backdrop">
     <div class="modal">
-      <h3>Pay Now via M-Pesa STK</h3>
-      <label>Phone to charge</label>
-      <input id="stkPhone" type="tel" />
-      <label>Amount (KSh)</label>
-      <input id="stkAmount" type="text" readonly />
-      <div class="row">
-        <button id="btnStartStk" class="btn">Request STK</button>
-        <button id="btnCancelStk" class="btn ghost">Cancel</button>
+      <h2>Partner with Onionn</h2>
+      <label for="partner_name">Full name</label>
+      <input id="partner_name" type="text" />
+      <label for="partner_email">Email</label>
+      <input id="partner_email" type="email" />
+      <label for="partner_phone">Phone</label>
+      <input id="partner_phone" type="tel" />
+      <label for="partner_location">Location</label>
+      <input id="partner_location" />
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button id="partnerSubmitBtn" class="btn">Send Inquiry</button>
+        <button id="partnerCancelBtn" class="btn ghost">Cancel</button>
       </div>
-      <div id="stkStatus" class="helper" style="margin-top:8px"></div>
+      <p class="footnote muted">We will forward this inquiry to the seller.</p>
     </div>
   </div>
 
-      </div>
-    </div>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
   <script>
-    /***********************
-     * Simple local "store"
-     ***********************/
-    const PRICE_PER_KG = 60;
-    const store = {
-      get users(){ return JSON.parse(localStorage.getItem('onion_users')||'[]') },
-      set users(v){ localStorage.setItem('onion_users', JSON.stringify(v)) },
-      get session(){ return JSON.parse(localStorage.getItem('onion_session')||'null') },
-      set session(v){ localStorage.setItem('onion_session', JSON.stringify(v)) },
-      get orders(){ return JSON.parse(localStorage.getItem('onion_orders')||'[]') },
-      set orders(v){ localStorage.setItem('onion_orders', JSON.stringify(v)) },
-      setVerify(phone, code){ localStorage.setItem('verify_'+phone, code) },
-      getVerify(phone){ return localStorage.getItem('verify_'+phone) },
-      clearVerify(phone){ localStorage.removeItem('verify_'+phone) },
-    };
-    
-    /***********************
-     * Filling out order summary"
-     ***********************/
+    // Basic constants
+    const PRICE_PER_KG = 60; // Ksh
+    const SELLER_PHONE = '+254700000000'; // example seller phone for SMS
+    const SELLER_EMAIL = 'seller@example.com'; // example seller email
+    const VENDOR_COUNT = 6;
 
+    // Utility: hash password via SHA-256 -> hex
+    async function hashHex(str) {
+      const enc = new TextEncoder();
+      const data = enc.encode(str);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      const arr = Array.from(new Uint8Array(hash));
+      return arr.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
 
-    
-    /***********************
-     * Demo seller data
-     ***********************/
-    const sellers = [
-      { id:'S1', name:'Onionn', phone:'Order online', lat:-1.5945032, lng:36.9272013 },
-      { id:'S2', name:'OnionsHub', phone:'Order online', lat:-3.603548, lng:39.857002 },
-    ];
+    // localStorage helpers
+    function getUsers() {
+      try {
+        return JSON.parse(localStorage.getItem('onionn_users') || '[]');
+      } catch (e) { return []; }
+    }
+    function setUsers(u) { localStorage.setItem('onionn_users', JSON.stringify(u)); }
+    function setLoggedInEmail(email) { localStorage.setItem('onionn_logged', email); }
+    function getLoggedInEmail() { return localStorage.getItem('onionn_logged'); }
+    function clearLogged() { localStorage.removeItem('onionn_logged'); }
 
-    /***********************
-     * Map
-     ***********************/
-    let map, userMarker;
-    function initMap(){
-      map = L.map('map').setView([ -1.286389, 36.817223 ], 8); // Kenya default (Nairobi-ish)
+    // DOM
+    const createAccountBtn = document.getElementById('createAccountBtn');
+    const createMsg = document.getElementById('createMsg');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginMsg = document.getElementById('loginMsg');
+    const logoutBtn = document.getElementById('logoutBtn');
 
+    const authArea = document.getElementById('authArea');
+    const mapCard = document.getElementById('mapCard');
+    const orderArea = document.getElementById('orderArea');
+
+    const previewBtn = document.getElementById('previewBtn');
+    const summaryBox = document.getElementById('summaryBox');
+    const submitOrderBtn = document.getElementById('submitOrderBtn');
+
+    const qtyInput = document.getElementById('qty');
+    const paymentMode = document.getElementById('paymentMode');
+    const mpesaOptions = document.getElementById('mpesaOptions');
+    const mpesaType = document.getElementById('mpesaType');
+    const mpesaCustomWrap = document.getElementById('mpesaCustomWrap');
+    const mpesaNumber = document.getElementById('mpesaNumber');
+    const mpesaAccount = document.getElementById('mpesaAccount');
+
+    const useGeoBtn = document.getElementById('useGeoBtn');
+    const manualBtn = document.getElementById('manualBtn');
+    const manualWrap = document.getElementById('manualWrap');
+    const manualLocation = document.getElementById('manualLocation');
+
+    const partnerBtn = document.getElementById('partnerBtn');
+    const partnerBackdrop = document.getElementById('partnerBackdrop');
+    const partnerCancelBtn = document.getElementById('partnerCancelBtn');
+    const partnerSubmitBtn = document.getElementById('partnerSubmitBtn');
+    const partner_name = document.getElementById('partner_name');
+    const partner_email = document.getElementById('partner_email');
+    const partner_phone = document.getElementById('partner_phone');
+    const partner_location = document.getElementById('partner_location');
+
+    // GEO state
+    let userGeo = null; // {lat, lng}
+    let manualLoc = '';
+    let vendorMarkers = [];
+    let map, userMarker, vendorLayer;
+
+    // init map
+    function initMap() {
+      map = L.map('map', { zoomControl: true }).setView([0,0], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors'
+        attribution: '&copy; OpenStreetMap contributors'
       }).addTo(map);
 
-      // Seller markers
-      sellers.forEach(s=>{
-        const m = L.marker([s.lat, s.lng]).addTo(map);
-        m.bindPopup(`<strong>${s.name}</strong><br>📞 ${s.phone}`);
-      });
+      vendorLayer = L.layerGroup().addTo(map);
 
-      // Attempt geolocation
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(pos=>{
-          const {latitude, longitude} = pos.coords;
-          map.setView([latitude, longitude], 13);
-          userMarker = L.circleMarker([latitude, longitude], {radius:8}).addTo(map);
+      // get geolocation
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+          userGeo = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          map.setView([userGeo.lat, userGeo.lng], 13);
+          if (userMarker) map.removeLayer(userMarker);
+          userMarker = L.circleMarker([userGeo.lat, userGeo.lng], { radius:8, color:'#0f7c36', fill:'#0f7c36' }).addTo(map);
           userMarker.bindPopup('You are here').openPopup();
-        }, err=>{
-          console.log('Geo blocked or failed:', err.message);
-        }, { enableHighAccuracy:true, timeout:8000 });
-      }
-
-      // Nice seller “chips”
-      //const chips = document.getElementById('sellerChips');
-      //chips.innerHTML = sellers.map(s=>`<div class="seller-pill">📍 ${s.name} · ${s.phone}</div>`).join('');
-    }
-
-    /***********************
-     * Auth
-     ***********************/
-    const regEmail = document.getElementById('regEmail');
-    const regPhone = document.getElementById('regPhone');
-    const regPass  = document.getElementById('regPass');
-    const btnCreate = document.getElementById('btnCreate');
-    const verifyBox = document.getElementById('verifyBox');
-    const verifyCode = document.getElementById('verifyCode');
-    const btnVerify = document.getElementById('btnVerify');
-
-    const loginEmail = document.getElementById('loginEmail');
-    const loginPass  = document.getElementById('loginPass');
-    const btnLogin   = document.getElementById('btnLogin');
-
-    const authCard = document.getElementById('authCard');
-    const appCard  = document.getElementById('appCard');
-    const welcomeName = document.getElementById('welcomeName');
-
-    btnCreate.addEventListener('click', ()=>{
-      const email = regEmail.value.trim().toLowerCase();
-      const phone = cleanPhone(regPhone.value.trim());
-      const pass  = regPass.value;
-      const name  = regName.value;
-      if(!name || !email || !phone || !pass) return alert('Please fill all fields');
-      if(!/^07\d{8}$/.test(phone) && !/^\+2547\d{8}$/.test(phone)) {
-        return alert('Enter a Safaricom number like 07XXXXXXXX');
-      }
-      const users = store.users;
-      if(users.find(u=>u.email===email)) return alert('Email already registered');
-      // Create pending user (unverified)
-    });
-
-    // Helper: hash password using SHA-256
-    async function hashPassword(password) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(password);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      return hashHex;
-    }
-
-    btnCreate.addEventListener('click', async ()=>{
-      const email = regEmail.value.trim().toLowerCase();
-      const phone = cleanPhone(regPhone.value.trim());
-      const pass  = regPass.value;
-      const name  = regName.value;
-
-      if(!name || !email || !phone || !pass) return alert('Please fill all fields');
-
-      if(!/^07\d{8}$/.test(phone) && !/^\+2547\d{8}$/.test(phone)) {
-        return alert('Enter a Safaricom number like 07XXXXXXXX');
-      }
-
-      // Get users from localStorage, or empty array if none
-      const users = JSON.parse(localStorage.getItem('users')) || [];
-
-      // Check if email already exists
-      if(users.find(u => u.email === email)) {
-        return alert('Email already registered');
-      }
-
-      // Check if phone already exists
-      if(users.find(u => u.phone === phone)) {
-        return alert('Phone number already registered');
-      }
-
-      // Hash the password before storing
-      const hashedPass = await hashPassword(pass);
-
-      // Create new user object with hashed password
-      const newUser = { name, email, phone, pass: hashedPass };
-
-      // Add new user to users array
-      users.push(newUser);
-
-      // Save updated users list back to localStorage
-      localStorage.setItem('users', JSON.stringify(users));
-
-      // Confirmation message
-      alert('Account successfully created!');
-  
-      // Optional: clear form fields
-      regName.value = '';
-      regEmail.value = '';
-      regPhone.value = '';
-      regPass.value = '';
-    });
-
-    // Same helper from before
-    async function hashPassword(password) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(password);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      return hashHex;
-    }
-
-    btnLogin.addEventListener('click', async ()=>{
-      const email = loginEmail.value.trim().toLowerCase();
-      const pass  = loginPass.value;
-
-      if(!email || !pass) return alert('Please enter email and password');
-
-      // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem('users')) || [];
-
-      // Find user by email
-      const user = users.find(u => u.email === email);
-      if(!user) return alert('No account found with this email');
-
-      // Hash entered password
-      const hashedPass = await hashPassword(pass);
-
-      // Compare hashes
-      if(user.pass === hashedPass) {
-        alert('Login successful!');
-        // Optional: mark user as logged in
-        localStorage.setItem('currentUser', JSON.stringify(user));
+          placeVendorsNearUser();
+        }, (err) => {
+          console.warn('geoloc denied or failed', err);
+          map.setView([0.0236, 37.9062], 6); // Kenya default
+          placeVendorsNearUser();
+        }, { enableHighAccuracy:true, maximumAge:60000, timeout:10000 });
       } else {
-        alert('Incorrect password');
+        placeVendorsNearUser();
       }
-
-      // Clear form fields
-      loginEmail.value = '';
-      loginPass.value = '';
-
-      onLoggedIn();
-    });
-
-    function onLoggedIn(){
-      authCard.classList.add('hidden');
-      appCard.classList.remove('hidden');
-      const s = store.session;
-      welcomeName.textContent = s.email;
-      document.getElementById('summaryPhone').textContent = s.phone;
-
-      // Populate seller select
-      const sel = document.getElementById('sellerSelect');
-      sel.innerHTML = sellers.map(s=>`<option value="${s.id}">${s.name} (${s.phone})</option>`).join('');
-      updateSummarySeller();
-      renderHistory();
     }
 
-    document.getElementById('btnLogout').addEventListener('click', ()=>{
-      store.session = null;
-      appCard.classList.add('hidden');
-      authCard.classList.remove('hidden');
-    });
-
-    function cleanPhone(p){ return p.replace(/\s+/g,''); }
-    function normalizeTo254(p){
-      if(p.startsWith('+254')) return p;
-      if(p.startsWith('0')) return '+254'+p.slice(1);
-      return p; // naive
+    // create some vendor coordinates around user (or default)
+    function placeVendorsNearUser() {
+      vendorLayer.clearLayers();
+      vendorMarkers = [];
+      const center = userGeo ? [userGeo.lat, userGeo.lng] : [ -1.286389, 36.817223 ]; // Nairobi fallback
+      for (let i=0;i<VENDOR_COUNT;i++){
+        const offsetLat = (Math.random()*0.03 - 0.015); // ~±1.7km
+        const offsetLng = (Math.random()*0.03 - 0.015);
+        const lat = center[0] + offsetLat;
+        const lng = center[1] + offsetLng;
+        const vendor = { id: 'v'+i, name: 'Vendor '+(i+1), lat, lng, phone: SELLER_PHONE };
+        const distanceKm = distanceBetween(userGeo ? userGeo.lat : center[0], userGeo ? userGeo.lng : center[1], lat, lng);
+        const etaMins = estimateDeliveryMins(distanceKm);
+        const marker = L.marker([lat,lng]).addTo(vendorLayer);
+        marker.bindPopup(`<strong>${vendor.name}</strong><div class="small">Est. delivery time: ${Math.round(etaMins)} min</div><div class="small">Distance: ${distanceKm.toFixed(2)} km</div>`);
+        vendorMarkers.push({ vendor, marker, distanceKm, etaMins });
+      }
+      // fit bounds
+      try {
+        const group = L.featureGroup(vendorMarkers.map(v=>v.marker));
+        if (userMarker) group.addLayer(userMarker);
+        map.fitBounds(group.getBounds().pad(0.5));
+      } catch(e){}
     }
 
-    /***********************
-     * Tabs
-     ***********************/
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(t=>{
-      t.addEventListener('click', ()=>{
-        tabs.forEach(x=>x.classList.remove('active'));
-        t.classList.add('active');
-        const target = t.dataset.tab;
-        document.querySelectorAll('#appCard section').forEach(sec=>{
-          sec.classList.add('hidden');
-        });
-        document.getElementById('tab-'+target).classList.remove('hidden');
-      });
+    function distanceBetween(lat1, lon1, lat2, lon2) {
+      // Haversine
+      if (!lat1 || !lon1 || !lat2 || !lon2) return 0;
+      const R = 6371; // km
+      const dLat = toRad(lat2-lat1);
+      const dLon = toRad(lon2-lon1);
+      const a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+                Math.cos(toRad(lat1))*Math.cos(toRad(lat2)) *
+                Math.sin(dLon/2)*Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+    function toRad(v){ return v * Math.PI/180; }
+
+    function estimateDeliveryMins(distanceKm) {
+      // assume average delivery speed 30 km/h (including loading), so time (min) = distance / 30 * 60
+      const speedKmh = 30;
+      return (distanceKm / speedKmh) * 60;
+    }
+
+    // Create account event
+    createAccountBtn.addEventListener('click', async () => {
+      const name = document.getElementById('ca_name').value.trim();
+      const email = document.getElementById('ca_email').value.trim().toLowerCase();
+      const phone = document.getElementById('ca_phone').value.trim();
+      const password = document.getElementById('ca_password').value;
+      createMsg.textContent = '';
+      if (!name || !email || !phone || !password) {
+        createMsg.textContent = 'Please fill all fields.';
+        return;
+      }
+      const users = getUsers();
+      if (users.find(u => u.email === email)) {
+        createMsg.textContent = 'An account with that email already exists.';
+        return;
+      }
+      const hashed = await hashHex(password);
+      users.push({ name, email, phone, passwordHash: hashed });
+      setUsers(users);
+      createMsg.textContent = 'Account created. You can now login.';
+      // Clear password input
+      document.getElementById('ca_password').value = '';
     });
 
-    /***********************
-     * New Order + Payment
-     ***********************/
+    // Login event
+    loginBtn.addEventListener('click', async () => {
+      const email = document.getElementById('li_email').value.trim().toLowerCase();
+      const password = document.getElementById('li_password').value;
+      loginMsg.textContent = '';
+      if (!email || !password) { loginMsg.textContent = 'Enter email and password.'; return; }
+      const hashed = await hashHex(password);
+      const users = getUsers();
+      const user = users.find(u => u.email === email && u.passwordHash === hashed);
+      if (!user) {
+        loginMsg.textContent = 'Invalid credentials.';
+        return;
+      }
+      // login successful
+      setLoggedInEmail(email);
+      showLoggedInUI();
+    });
 
+    // Show logged-in UI: hide authArea and map, show orderArea and logout
+    function showLoggedInUI() {
+      authArea.classList.add('hidden');
+      mapCard.classList.add('hidden');
+      orderArea.classList.remove('hidden');
+      logoutBtn.style.display = 'inline-block';
+      // Prefill partner form if possible
+      const user = getCurrentUser();
+      if (user) {
+        partner_name.value = user.name || '';
+        partner_email.value = user.email || '';
+        partner_phone.value = user.phone || '';
+        // location field: fill with geolocation if known
+        partner_location.value = userGeo ? `${userGeo.lat.toFixed(6)}, ${userGeo.lng.toFixed(6)}` : '';
+      }
+      // Store name/phone in quick localStorage for order summary retrieval
+      if (user) {
+        localStorage.setItem('onionn_name', user.name);
+        localStorage.setItem('onionn_phone', user.phone);
+      }
+      // Scroll to order area
+      orderArea.scrollIntoView({behavior:'smooth'});
+    }
 
-    /***********************
-     * History
-     ***********************/
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      clearLogged();
+      // show auth & map again
+      authArea.classList.remove('hidden');
+      mapCard.classList.remove('hidden');
+      orderArea.classList.add('hidden');
+      logoutBtn.style.display = 'none';
+      summaryBox.textContent = 'No summary yet.';
+    });
 
+    function getCurrentUser() {
+      const email = getLoggedInEmail();
+      if (!email) return null;
+      const users = getUsers();
+      return users.find(u => u.email === email) || null;
+    }
 
-    /***********************
-     * Helpers
-     ***********************/
-    function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
-    function escapeHtml(s){ return s.replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])) }
+    // Payment UI logic
+    paymentMode.addEventListener('change', () => {
+      if (paymentMode.value === 'mpesa') {
+        mpesaOptions.classList.remove('hidden');
+      } else {
+        mpesaOptions.classList.add('hidden');
+      }
+    });
+    mpesaType.addEventListener('change', () => {
+      if (mpesaType.value === 'other') mpesaCustomWrap.classList.remove('hidden');
+      else mpesaCustomWrap.classList.add('hidden');
+    });
 
-    // Quantity init
-    qty.dispatchEvent(new Event('input'));
+    // Delivery selection
+    useGeoBtn.addEventListener('click', () => {
+      if (!userGeo) {
+        alert('Geolocation not available. Allow location permission or enter manual location.');
+        return;
+      }
+      manualWrap.classList.add('hidden');
+      manualLocation.value = '';
+      manualLoc = '';
+      alert('Delivery set to your geolocation.');
+    });
+    manualBtn.addEventListener('click', () => {
+      manualWrap.classList.remove('hidden');
+      manualLocation.focus();
+    });
+    manualLocation.addEventListener('input', () => {
+      manualLoc = manualLocation.value.trim();
+    });
 
-    // Auto-login if session exists
-    window.addEventListener('load', ()=>{
+    // Preview order summary
+    previewBtn.addEventListener('click', () => {
+      buildSummary();
+    });
+
+    function buildSummary() {
+      const user = getCurrentUser();
+      const name = (localStorage.getItem('onionn_name') || (user ? user.name : ''));
+      const phone = (localStorage.getItem('onionn_phone') || (user ? user.phone : ''));
+      const qty = Number(qtyInput.value) || 0;
+      const total = qty * PRICE_PER_KG;
+      const payment = paymentMode.value;
+      const mpesaT = mpesaType.value;
+      const mpesaNum = mpesaNumber.value.trim();
+      const account = mpesaAccount.value.trim();
+
+      const now = new Date();
+      const timeStr = now.toLocaleString();
+
+      // delivery location
+      let deliveryDesc = '';
+      if (manualLoc) deliveryDesc = manualLoc;
+      else if (userGeo) deliveryDesc = `${userGeo.lat.toFixed(6)}, ${userGeo.lng.toFixed(6)}`;
+      else deliveryDesc = 'Not specified';
+
+      const summary = [
+        `Name: ${name}`,
+        `Phone: ${phone}`,
+        `Order time: ${timeStr}`,
+        `Delivery location: ${deliveryDesc}`,
+        `Quantity: ${qty} Kg`,
+        `Price per Kg: ${PRICE_PER_KG} Ksh`,
+        `Total price: ${total} Ksh`,
+        `Payment method: ${payment === 'mpesa' ? ('M-Pesa (' + mpesaT + (mpesaT==='other' ? (': '+mpesaNum) : '') +')') : 'Payment on delivery'}`,
+        account ? `Payment account: ${account}` : '',
+      ].filter(Boolean).join('\\n');
+
+      summaryBox.textContent = summary;
+      return summary;
+    }
+
+    // Submit order: if Payment ON DELIVERY selected -> send sms (mobile) or email (desktop/tablet)
+    submitOrderBtn.addEventListener('click', async () => {
+      const payment = paymentMode.value;
+      // check delivery selection
+      const hasManual = manualLoc && manualLoc.length > 0;
+      if (!hasManual && !userGeo) {
+        alert('Please select delivery to your geolocation or enter manual delivery location.');
+        return;
+      }
+      const summary = buildSummary();
+      if (payment === 'pod') {
+        // Payment on delivery -> send via sms (mobile) or email (desktop)
+        sendOrderViaExternalLink(summary);
+      } else {
+        alert('For M-Pesa payments, preview your summary and then use the M-Pesa app to complete payment. You may still submit order to seller after payment.');
+        // Offer to send the order too (we'll open mail/sms as above)
+        if (confirm('Also send the order summary to the seller?')) {
+          sendOrderViaExternalLink(summary);
+        }
+      }
+    });
+
+    function isMobile() {
+      // a simple heuristic
+      return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent) || navigator.maxTouchPoints > 0 && window.innerWidth < 900;
+    }
+
+    function sendOrderViaExternalLink(summary) {
+      if (isMobile()) {
+        // use SMS
+        const body = encodeURIComponent(summary);
+        // sms: with body works differently: sms:+number?body=...
+        window.location.href = `sms:${SELLER_PHONE}?body=${body}`;
+      } else {
+        // desktop: use mailto
+        const subject = encodeURIComponent('Onionn Order');
+        const body = encodeURIComponent(summary);
+        window.location.href = `mailto:${SELLER_EMAIL}?subject=${subject}&body=${body}`;
+      }
+    }
+
+    // Partner modal
+    partnerBtn.addEventListener('click', () => {
+      partnerBackdrop.style.display = 'flex';
+      // prefill from logged-in user/localStorage
+      const user = getCurrentUser();
+      if (user) {
+        partner_name.value = user.name || '';
+        partner_email.value = user.email || '';
+        partner_phone.value = user.phone || '';
+      }
+      partner_location.value = userGeo ? `${userGeo.lat.toFixed(6)}, ${userGeo.lng.toFixed(6)}` : '';
+    });
+    partnerCancelBtn.addEventListener('click', () => { partnerBackdrop.style.display = 'none'; });
+
+    partnerSubmitBtn.addEventListener('click', () => {
+      const name = partner_name.value.trim();
+      const email = partner_email.value.trim();
+      const phone = partner_phone.value.trim();
+      const location = partner_location.value.trim();
+      if (!name || !phone || !email) {
+        alert('Please fill name, phone and email.');
+        return;
+      }
+      const summary = `Partner inquiry:\\nName: ${name}\\nPhone: ${phone}\\nEmail: ${email}\\nLocation: ${location || 'Not provided'}`;
+      // send
+      if (isMobile()) {
+        window.location.href = `sms:${SELLER_PHONE}?body=${encodeURIComponent(summary)}`;
+      } else {
+        window.location.href = `mailto:${SELLER_EMAIL}?subject=${encodeURIComponent('Partner Inquiry')} &body=${encodeURIComponent(summary)}`;
+      }
+      partnerBackdrop.style.display = 'none';
+    });
+
+    // On load
+    window.addEventListener('load', () => {
       initMap();
-      const s = store.session;
-      if(s){
-        onLoggedIn();
-      }
+      // check logged-in
+      if (getLoggedInEmail()) showLoggedInUI();
     });
+
+    // simple touch: create sample vendor distances update if user moves
+    // re-place vendors when map clicked (for testing)
+    map && map.on && map.on('click', () => placeVendorsNearUser());
   </script>
 </body>
 </html>
