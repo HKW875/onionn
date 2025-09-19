@@ -9,11 +9,20 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 
   <style>
-
+    #submitOrderBtn {
+    background-color: #27b02e;
+    color: white; /* optional to keep text visible */
+    }
+    h1, h2, p {
+    color: black;
+    }
+     h1, h2 {
+     font-family: 'Metropolis', sans-serif;
+    }
     :root{
-      --brand:#1f2937; /* dark blue/black */
+      --brand:#27b02e; 
       --brand-dark:#0f7c36;
-      --ink:#1f2937;
+      --ink:#27b02e;
       --muted:#6b7280;
       --bg:#9ec8e8;
       --card:#ffffff;
@@ -21,221 +30,62 @@
       --accent:#f59e0b;
     }
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color:var(--ink);
-      background:var(--bg);
-    }
-    header{
-      padding:24px 12px 8px;
-      text-align:center;
-    }
-    .logo{
-      display:inline-flex;
-      align-items:center;
-      gap:12px;
-      margin:auto;
-      font-weight:800;
-      font-size: clamp(24px, 3.5vw, 40px);
-      color:var(--brand);
-      letter-spacing:0.5px;
-    }
-    .logo .mark{
-      width:52px;height:52px;border-radius:10px;
-      background:linear-gradient(135deg, var(--brand), #8A1422);
-      display:inline-flex;align-items:center;justify-content:center;
-      color:white;font-weight:900;
-      box-shadow:0 6px 20px rgba(23,163,74,0.25);
-    }
-    .container{
-      max-width:980px;margin:0 auto;padding:0 12px 60px;
-    }
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:16px;
-      box-shadow:0 6px 24px rgba(0,0,0,0.04);
-      margin-top:12px;
-    }
-    #map{
-      width:100%;
-      height:340px;
-      border-radius:12px;
-      border:1px solid var(--border);
-    }
-    .two-col{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:14px;
-    }
-    @media (min-width:900px){
-      .two-col{grid-template-columns: 1fr 1fr;}
-    }
-    h2{
-      margin:10px 0 6px;font-size:20px;text-align: center;
-    }
-    h1{
-      margin:10px 0 6px;font-size:15px;text-align: center;
-    }
-    label{display:block;font-size:14px;color:var(--muted);margin:12px 0 6px}
-    input, select, button, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius:10px;
-      border:1px solid var(--border);
-      font-size:16px;
-      outline:none;
-      background:white;
-    }
-    input:focus, textarea:focus, select:focus{
-      border-color:var(--brand);
-      box-shadow:0 0 0 4px rgba(23,163,74,0.12);
-    }
-    .row{
-      display:grid;grid-template-columns:1fr 1fr;gap:12px;
-    }
-    .btn{
-      cursor:pointer;
-      background:var(--brand);color:white;border:none;
-      font-weight:700;
-      transition:.2s ease, filter 0.2s ease; margin-top:12px;
-    }
-    .btn.secondary{
-      background:#111827;color:#fff;
-    }
-    .btn.ghost{
-      background:transparent;color:var(--brand);border:1px solid var(--brand);margin-bottom: 10px;
-    }
-    .btn:hover{filter:brightness(0.95); opacity:0.7;}
-    .muted{color:var(--muted)}
-    .success{color:var(--brand-dark);font-weight:600}
-    .tabs{
-      display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;
-      border-bottom:1px solid var(--border);padding-bottom:6px;
-    }
-    .tab{
-      padding:10px 14px;border-radius:10px;border:1px solid var(--border);
-      background:var(--card);cursor:pointer;font-weight:600;
-    }
-    .tab.active{
-      background:var(--brand);color:white;border-color:var(--brand);
-    }
-    .hidden{display:none !important}
-    .right{justify-self:end}
-    .tag{
-      display:inline-block;background:#ecfdf5;color:var(--brand-dark);
-      border:1px solid #bbf7d0;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700
-    }
-    .list{display:grid;gap:10px;margin-top:12px}
-    .order-item{
-      border:1px solid var(--border);border-radius:10px;padding:10px;background:white;
-      display:grid;gap:6px
-    }
-    .pill{
-      display:inline-block;padding:4px 10px;border-radius:999px;background:#f3f4f6;font-size:12px
-    }
-    .right-actions{
-      display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end
-    }
-    .helper{font-size:12px;color:var(--muted)}
-    .center{text-align:center}
-    .modal-backdrop{
-      position:fixed;inset:0;background:rgba(0,0,0,0.3);
-      display:none;align-items:center;justify-content:center;padding:16px;z-index:50;
-    }
-    .modal{
-      width:min(560px, 100%);background:white;border-radius:12px;border:1px solid var(--border);padding:16px;
-    }
-    .footnote{margin-top:14px;font-size:12px;color:var(--muted)}
-    .seller-box{
-      display:flex;gap:8px;flex-wrap:wrap;margin-top:8px
-    }
-    .seller-pill{
-      border:1px solid var(--border);border-radius:8px;padding:6px 10px;background:#fff
-    }
-
-    /* small extras */
-    .topbar{
-      position:sticky;top:0;z-index:40;background:transparent;padding:12px;display:flex;justify-content:flex-end;gap:12px;
-    }
-    #logoutBtn{display:none}
-    .order-section{margin-top:12px}
-    .summary{white-space:pre-wrap;background:#f8fafc;padding:12px;border-radius:10px;border:1px dashed var(--border)}
-    .partners-hidden{display:none}
-    .partner-btn{margin-top:12px}
-    .small{font-size:13px}
+    body{margin:0;font-family:system-ui;background:var(--bg);color:var(--ink);}
+    header{padding:24px 12px 8px;text-align:center;}
+    .logo{display:inline-flex;align-items:center;gap:12px;font-weight:800;font-size:clamp(24px,3.5vw,40px);color:var(--brand);font-family: 'Metropolis', sans-serif;}
+    .logo .mark{width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#8A1422);display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:900;}
+    .container{max-width:980px;margin:0 auto;padding:0 12px 60px;}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:0 6px 24px rgba(0,0,0,0.04);margin-top:12px;}
+    #map{width:100%;height:340px;border-radius:12px;border:1px solid var(--border);}
+    h2{text-align:center;font-size:20px;}
+    h1{text-align:center;font-size:15px;}
+    label{display:block;margin:12px 0 6px;color:var(--muted);font-size:14px}
+    input,select,textarea,button{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);font-size:16px;}
+    textarea{resize:vertical;min-height:80px;}
+    .btn{cursor:pointer;background:var(--brand);color:white;font-weight:700;margin-top:12px;border:none;}
+    .btn.secondary{background:#111827;}
+    .btn.ghost{background:transparent;color:var(--brand);border:1px solid var(--brand);}
+    .summary{white-space:pre-wrap;background:#f8fafc;padding:12px;border-radius:10px;border:1px dashed var(--border);font-size:13px;}
+    .success{color:var(--brand-dark);font-weight:600;margin-top:8px}
   </style>
 </head>
 <body>
   <header>
-    <div class="logo" aria-label="Onionn logo">
-      <div class="mark">🧅</div>
-      <div>Onionn</div>
-    </div>
+    <div class="logo"><div class="mark">🧅</div>Onionn</div>
   </header>
   <h2>📱Order onions online 🚚 Free same day delivery 💵 Save up to 50%! 📱Payment on delivery</h2>
   <h2>📱Our current price: 50 Kes per kg 💵 Become a partner 💵 Earn points</h2>
   <h1>🧅Service available in Nairobi, Kitengela, Malindi, Kilifi, Mombasa</h1>
   <h1>🧅Current stock: 🧅Nairobi:Sold out 🧅Kitengela: Available 🧅Malindi: Sold out 🧅Kilifi: Sold out 🧅Mombasa: Sold out</h1>
-  <div class="topbar container">
-    <button id="logoutBtn" class="btn secondary">Logout</button>
-  </div>
 
   <main class="container">
-    <!-- MAP CARD (visible before login) -->
-    <div id="mapCard" class="card">
+    <!-- Map -->
+    <div class="card">
       <div id="map"></div>
     </div>
 
-    <!-- Create Account + Login sections (two separate sections; only one button each) -->
-    <div id="authArea" class="two-col card" style="margin-top:12px;">
-      <!-- Create Account -->
-      <div id="createAccountCard">
-        <h2>Create account</h2>
-        <label for="ca_name">Full name</label>
-        <input id="ca_name" type="text" placeholder="Your name" />
-        <label for="ca_email">Email</label>
-        <input id="ca_email" type="email" placeholder="you@example.com" />
-        <label for="ca_phone">Phone</label>
-        <input id="ca_phone" type="tel" placeholder="+2547xxxxxxxx" />
-        <label for="ca_password">Password</label>
-        <input id="ca_password" type="password" placeholder="Choose a password" />
-        <button id="createAccountBtn" class="btn">Create Account</button>
-        <div id="createMsg" class="helper"></div>
-      </div>
-
-      <!-- Login -->
-      <div id="loginCard">
-        <h2>Login</h2>
-        <label for="li_email">Email</label>
-        <input id="li_email" type="email" placeholder="you@example.com" />
-        <label for="li_password">Password</label>
-        <input id="li_password" type="password" placeholder="Your password" />
-        <button id="loginBtn" class="btn">Login</button>
-        <div id="loginMsg" class="helper"></div>
-      </div>
-      <div class="container">
-      <div class="card center">
-        <h2>User Data Safety</h2>
-        <p class="muted">Click below to clear your account data. New account entry required to submit new order.</p>
-        <button id="logoutDataBtn" class="btn">Clear User Data</button>
-        <div id="message" class="success hidden"></div>
-      </div>
-    </div>
-      
-    </div>
-
-    <!-- Order Section (hidden before login) -->
-    <div id="orderArea" class="card hidden">
+    <!-- Order Section -->
+    <div id="orderArea" class="card">
       <div class="row">
         <div>
-          <h2>Order onions (60 Ksh / Kg)</h2>
+          <h2>Order onions (50 Ksh / Kg)</h2>
+
+          <!-- Customer Details -->
+          <label for="custName">Customer Name</label>
+          <input id="custName" type="text" placeholder="Full Name"/>
+
+          <label for="custPhone">Phone Number</label>
+          <input id="custPhone" type="tel" placeholder="07xx xxx xxx"/>
+
+          <label for="custEmail">Email</label>
+          <input id="custEmail" type="email" placeholder="example@email.com"/>
+
+          <!-- Order Details -->
           <label for="qty">Quantity (Kg)</label>
           <input id="qty" type="number" min="1" value="1" />
+
           <label>Delivery location</label>
-          <div class="row" style="grid-template-columns:1fr 1fr;">
+          <div style="display:flex;gap:8px;">
             <button id="useGeoBtn" class="btn ghost">Use my geolocation</button>
             <button id="manualBtn" class="btn ghost">Enter manually</button>
           </div>
@@ -244,6 +94,15 @@
             <input id="manualLocation" placeholder="Address or description"/>
           </div>
 
+          <!-- Preferred Time -->
+          <label for="deliveryTime">Preferred Delivery Time</label>
+          <input id="deliveryTime" type="text" placeholder="e.g. 2 PM - 4 PM"/>
+
+          <!-- Special Notes -->
+          <label for="specialNotes">Special Delivery Notes / Instructions</label>
+          <textarea id="specialNotes" placeholder="Any instructions for delivery?"></textarea>
+
+          <!-- Payment -->
           <label>Payment method</label>
           <select id="paymentMode">
             <option value="mpesa">M-Pesa</option>
@@ -251,50 +110,43 @@
           </select>
 
           <div id="mpesaOptions" class="hidden">
-            <label for="mpesaType">M-Pesa type</label>
-            <select id="mpesaType">
-              <option value="paybill">Paybill</option>
-              <option value="till">Till</option>
-              <option value="other">Other (enter)</option>
-            </select>
-            <div id="mpesaCustomWrap" class="hidden">
-              <label for="mpesaNumber">Paybill / Till Number</label>
-              <input id="mpesaNumber" placeholder="e.g. 123456 or Till number"/>
-            </div>
             <label for="mpesaAccount">Account / Business Name (optional)</label>
-            <input id="mpesaAccount" placeholder="Account name"/>
+            <input id="mpesaAccount"/>
           </div>
+
+          <!-- Copy to Email -->
+          <label for="sendCopy">Send Copy of Order to Customer Email</label>
+          <select id="sendCopy">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
 
           <div style="display:flex;gap:8px;">
             <button id="previewBtn" class="btn">Preview Order</button>
-            <button id="partnerBtn" class="btn ghost partner-btn">Become a Partner</button>
+            <button id="partnerBtn" class="btn ghost">Become a Partner</button>
           </div>
         </div>
-
         <div>
           <h2>Order summary</h2>
-          <div id="summaryBox" class="summary small">No summary yet.</div>
-          <div class="footnote">
-            <div class="muted">You must select delivery location (geolocation or manual) before submitting.</div>
-          </div>
-
-          <div style="margin-top:12px;">
-            <button id="submitOrderBtn" class="btn secondary">Submit Order</button>
-          </div>
-
-          <div class="footnote" style="margin-top:12px;">
-            <div class="muted">Orders are sent to the seller via SMS on mobile, or email on desktop/tablet.</div>
-          </div>
+          <div id="summaryBox" class="summary">No summary yet.</div>
+          <button id="submitOrderBtn" class="btn secondary" style="margin-top:12px;">Submit Order</button>
         </div>
       </div>
     </div>
 
+    <!-- User Data Safety (bottom of page) -->
+    <div class="card center">
+      <h2>User Data Safety</h2>
+      <p class="muted"style="text-align:center; font-family:'Metropolis', sans-serif;">Click below to clear your account data.</p>
+      <button id="logoutDataBtn" class="btn">Clear User Data</button>
+      <div id="message" class="success hidden"></div>
+    </div>
   </main>
 
-  <!-- Partner modal / area -->
-  <div id="partnerBackdrop" class="modal-backdrop">
-    <div class="modal">
-      <h2>Partner with Onionn</h2>
+  <!-- Partner modal -->
+  <div id="partnerBackdrop" class="modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);align-items:center;justify-content:center;">
+    <div class="modal card" style="max-width:500px;">
+      <h2>Become a farmer Partner</h2>
       <label for="partner_name">Full name</label>
       <input id="partner_name" type="text" />
       <label for="partner_email">Email</label>
@@ -307,412 +159,107 @@
         <button id="partnerSubmitBtn" class="btn">Send Inquiry</button>
         <button id="partnerCancelBtn" class="btn ghost">Cancel</button>
       </div>
-      <p class="footnote muted">We will forward this inquiry to the seller.</p>
     </div>
   </div>
 
   <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // Basic constants
-    const logoutDataBtn = document.getElementById("logoutDataBtn");
-    const message = document.getElementById("message");
-
-    logoutDataBtn.addEventListener("click", () => {
-      // Clear all localStorage data
-      localStorage.clear();
-
-      // Give feedback to user
-      message.textContent = "✅ You have been logged out. All data cleared.";
-      message.classList.remove("hidden"); 
-
-    });
-    
-    // Basic constants
-    const PRICE_PER_KG = 50; // Ksh
-    const SELLER_PHONE = '+254708253594'; // example seller phone for SMS
-    const SELLER_EMAIL = 'wambuguhkw@gmail.com'; // example seller email
+    const PRICE_PER_KG = 50;
+    const SELLER_PHONE = '+254708253594';
+    const SELLER_EMAIL = 'wambuguhkw@gmail.com';
     const VENDOR_COUNT = 6;
 
-    // Utility: hash password via SHA-256 -> hex
-    async function hashHex(str) {
-      const enc = new TextEncoder();
-      const data = enc.encode(str);
-      const hash = await crypto.subtle.digest('SHA-256', data);
-      const arr = Array.from(new Uint8Array(hash));
-      return arr.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+    // Clear user data
+    document.getElementById("logoutDataBtn").addEventListener("click", () => {
+      localStorage.clear();
+      document.getElementById("message").textContent = "✅ Data cleared.";
+      document.getElementById("message").classList.remove("hidden");
+    });
 
-    // localStorage helpers
-    function getUsers() {
-      try {
-        return JSON.parse(localStorage.getItem('onionn_users') || '[]');
-      } catch (e) { return []; }
-    }
-    function setUsers(u) { localStorage.setItem('onionn_users', JSON.stringify(u)); }
-    function setLoggedInEmail(email) { localStorage.setItem('onionn_logged', email); }
-    function getLoggedInEmail() { return localStorage.getItem('onionn_logged'); }
-    function clearLogged() { localStorage.removeItem('onionn_logged'); }
-
-    // DOM
-    const createAccountBtn = document.getElementById('createAccountBtn');
-    const createMsg = document.getElementById('createMsg');
-    const loginBtn = document.getElementById('loginBtn');
-    const loginMsg = document.getElementById('loginMsg');
-    const logoutBtn = document.getElementById('logoutBtn');
-
-    const authArea = document.getElementById('authArea');
-    const mapCard = document.getElementById('mapCard');
-    const orderArea = document.getElementById('orderArea');
-
-    const previewBtn = document.getElementById('previewBtn');
-    const summaryBox = document.getElementById('summaryBox');
-    const submitOrderBtn = document.getElementById('submitOrderBtn');
-
-    const qtyInput = document.getElementById('qty');
-    const paymentMode = document.getElementById('paymentMode');
-    const mpesaOptions = document.getElementById('mpesaOptions');
-    const mpesaType = document.getElementById('mpesaType');
-    const mpesaCustomWrap = document.getElementById('mpesaCustomWrap');
-    const mpesaNumber = document.getElementById('mpesaNumber');
-    const mpesaAccount = document.getElementById('mpesaAccount');
-
-    const useGeoBtn = document.getElementById('useGeoBtn');
-    const manualBtn = document.getElementById('manualBtn');
-    const manualWrap = document.getElementById('manualWrap');
-    const manualLocation = document.getElementById('manualLocation');
-
-    const partnerBtn = document.getElementById('partnerBtn');
-    const partnerBackdrop = document.getElementById('partnerBackdrop');
-    const partnerCancelBtn = document.getElementById('partnerCancelBtn');
-    const partnerSubmitBtn = document.getElementById('partnerSubmitBtn');
-    const partner_name = document.getElementById('partner_name');
-    const partner_email = document.getElementById('partner_email');
-    const partner_phone = document.getElementById('partner_phone');
-    const partner_location = document.getElementById('partner_location');
-
-    // GEO state
-    let userGeo = null; // {lat, lng}
-    let manualLoc = '';
-    let vendorMarkers = [];
-    let map, userMarker, vendorLayer;
-
-    // init map
-    function initMap() {
-      map = L.map('map', { zoomControl: true }).setView([0,0], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
-
-      vendorLayer = L.layerGroup().addTo(map);
-
-      // get geolocation
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-          userGeo = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-          map.setView([userGeo.lat, userGeo.lng], 13);
-          if (userMarker) map.removeLayer(userMarker);
-          userMarker = L.circleMarker([userGeo.lat, userGeo.lng], { radius:8, color:'#0f7c36', fill:'#0f7c36' }).addTo(map);
-          userMarker.bindPopup('You are here').openPopup();
+    // Map + vendors
+    let userGeo=null, map, userMarker, vendorLayer;
+    function initMap(){
+      map=L.map("map").setView([-1.286389,36.817223],13);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(map);
+      vendorLayer=L.layerGroup().addTo(map);
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(pos=>{
+          userGeo={lat:pos.coords.latitude,lng:pos.coords.longitude};
+          map.setView([userGeo.lat,userGeo.lng],13);
+          userMarker=L.circleMarker([userGeo.lat,userGeo.lng],{radius:8,color:"#0f7c36",fill:"#0f7c36"}).addTo(map).bindPopup("You are here");
           placeVendorsNearUser();
-        }, (err) => {
-          console.warn('geoloc denied or failed', err);
-          map.setView([0.0236, 37.9062], 6); // Kenya default
-          placeVendorsNearUser();
-        }, { enableHighAccuracy:true, maximumAge:60000, timeout:10000 });
-      } else {
-        placeVendorsNearUser();
-      }
+        },()=>placeVendorsNearUser());
+      } else placeVendorsNearUser();
     }
-
-    // create some vendor coordinates around user (or default)
-    function placeVendorsNearUser() {
+    function placeVendorsNearUser(){
       vendorLayer.clearLayers();
-      vendorMarkers = [];
-      const center = userGeo ? [userGeo.lat, userGeo.lng] : [ -1.286389, 36.817223 ]; // Nairobi fallback
-      for (let i=0;i<VENDOR_COUNT;i++){
-        const offsetLat = (Math.random()*0.03 - 0.015); // ~±1.7km
-        const offsetLng = (Math.random()*0.03 - 0.015);
-        const lat = center[0] + offsetLat;
-        const lng = center[1] + offsetLng;
-        const vendor = { id: 'v'+i, name: 'Vendor '+(i+1), lat, lng, phone: SELLER_PHONE };
-        const distanceKm = distanceBetween(userGeo ? userGeo.lat : center[0], userGeo ? userGeo.lng : center[1], lat, lng);
-        const etaMins = estimateDeliveryMins(distanceKm);
-        const marker = L.marker([lat,lng]).addTo(vendorLayer);
-        marker.bindPopup(`<strong>${vendor.name}</strong><div class="small">Est. delivery time: ${Math.round(etaMins)} min</div><div class="small">Distance: ${distanceKm.toFixed(2)} km</div>`);
-        vendorMarkers.push({ vendor, marker, distanceKm, etaMins });
+      const center=userGeo?[userGeo.lat,userGeo.lng]:[-1.286389,36.817223];
+      for(let i=0;i<VENDOR_COUNT;i++){
+        const lat=center[0]+(Math.random()*0.03-0.015);
+        const lng=center[1]+(Math.random()*0.03-0.015);
+        const dist=distanceBetween(center[0],center[1],lat,lng);
+        const eta=(dist/30)*60;
+        L.marker([lat,lng]).addTo(vendorLayer).bindPopup(`Vendor ${i+1}<br>Est. ${Math.round(eta)} min<br>${dist.toFixed(2)} km`);
       }
-      // fit bounds
-      try {
-        const group = L.featureGroup(vendorMarkers.map(v=>v.marker));
-        if (userMarker) group.addLayer(userMarker);
-        map.fitBounds(group.getBounds().pad(0.5));
-      } catch(e){}
     }
+    function distanceBetween(a,b,c,d){const R=6371;const dLat=(c-a)*Math.PI/180;const dLon=(d-b)*Math.PI/180;const x=Math.sin(dLat/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
 
-    function distanceBetween(lat1, lon1, lat2, lon2) {
-      // Haversine
-      if (!lat1 || !lon1 || !lat2 || !lon2) return 0;
-      const R = 6371; // km
-      const dLat = toRad(lat2-lat1);
-      const dLon = toRad(lon2-lon1);
-      const a = Math.sin(dLat/2)*Math.sin(dLat/2) +
-                Math.cos(toRad(lat1))*Math.cos(toRad(lat2)) *
-                Math.sin(dLon/2)*Math.sin(dLon/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      return R * c;
+    // Delivery + payment logic
+    const manualWrap=document.getElementById("manualWrap");
+    const manualLocation=document.getElementById("manualLocation");
+    let manualLoc="";
+    document.getElementById("useGeoBtn").addEventListener("click",()=>{if(userGeo){manualLoc="";manualWrap.classList.add("hidden");alert("Delivery set to geolocation");}});
+    document.getElementById("manualBtn").addEventListener("click",()=>manualWrap.classList.remove("hidden"));
+    manualLocation.addEventListener("input",()=>manualLoc=manualLocation.value.trim());
+
+    const paymentMode=document.getElementById("paymentMode");
+    const mpesaOptions=document.getElementById("mpesaOptions");
+    paymentMode.addEventListener("change",()=>mpesaOptions.classList.toggle("hidden",paymentMode.value!=="mpesa"));
+
+    // Build summary
+    function buildSummary(){
+      const qty=Number(document.getElementById("qty").value)||0;
+      const total=qty*PRICE_PER_KG;
+      const now=new Date().toLocaleString();
+      const name=document.getElementById("custName").value.trim();
+      const phone=document.getElementById("custPhone").value.trim();
+      const email=document.getElementById("custEmail").value.trim();
+      const deliveryTime=document.getElementById("deliveryTime").value.trim();
+      const notes=document.getElementById("specialNotes").value.trim();
+      const sendCopy=document.getElementById("sendCopy").value==="yes"?"Yes":"No";
+      const payment=paymentMode.value==="mpesa"?"M-Pesa":"Payment on Delivery";
+      const account=document.getElementById("mpesaAccount").value.trim();
+      let delivery=manualLoc|| (userGeo?`${userGeo.lat.toFixed(6)},${userGeo.lng.toFixed(6)}`:"Not set");
+
+      return `Order time: ${now}
+Customer: ${name}
+Phone: ${phone}
+Email: ${email}
+Quantity: ${qty} Kg
+Total: ${total} Ksh
+Preferred Time: ${deliveryTime}
+Special Notes: ${notes}
+Delivery: ${delivery}
+Payment: ${payment}
+Account: ${account}
+Send Copy to Customer Email: ${sendCopy}`;
     }
-    function toRad(v){ return v * Math.PI/180; }
+    document.getElementById("previewBtn").addEventListener("click",()=>{document.getElementById("summaryBox").textContent=buildSummary();});
+    document.getElementById("submitOrderBtn").addEventListener("click",()=>sendOrderViaExternalLink(buildSummary()));
 
-    function estimateDeliveryMins(distanceKm) {
-      // assume average delivery speed 30 km/h (including loading), so time (min) = distance / 30 * 60
-      const speedKmh = 30;
-      return (distanceKm / speedKmh) * 60;
-    }
-
-    // Create account event
-    createAccountBtn.addEventListener('click', async () => {
-      const name = document.getElementById('ca_name').value.trim();
-      const email = document.getElementById('ca_email').value.trim().toLowerCase();
-      const phone = document.getElementById('ca_phone').value.trim();
-      const password = document.getElementById('ca_password').value;
-      createMsg.textContent = '';
-      if (!name || !email || !phone || !password) {
-        createMsg.textContent = 'Please fill all fields.';
-        return;
-      }
-      const users = getUsers();
-      if (users.find(u => u.email === email)) {
-        createMsg.textContent = 'An account with that email already exists.';
-        return;
-      }
-      const hashed = await hashHex(password);
-      users.push({ name, email, phone, passwordHash: hashed });
-      setUsers(users);
-      createMsg.textContent = 'Account created. You can now login.';
-      // Clear password input
-      document.getElementById('ca_password').value = '';
-    });
-
-    // Login event
-    loginBtn.addEventListener('click', async () => {
-      const email = document.getElementById('li_email').value.trim().toLowerCase();
-      const password = document.getElementById('li_password').value;
-      loginMsg.textContent = '';
-      if (!email || !password) { loginMsg.textContent = 'Enter email and password.'; return; }
-      const hashed = await hashHex(password);
-      const users = getUsers();
-      const user = users.find(u => u.email === email && u.passwordHash === hashed);
-      if (!user) {
-        loginMsg.textContent = 'Invalid credentials.';
-        return;
-      }
-      // login successful
-      setLoggedInEmail(email);
-      showLoggedInUI();
-    });
-
-    // Show logged-in UI: hide authArea and map, show orderArea and logout
-    function showLoggedInUI() {
-      authArea.classList.add('hidden');
-      mapCard.classList.add('hidden');
-      orderArea.classList.remove('hidden');
-      logoutBtn.style.display = 'inline-block';
-      // Prefill partner form if possible
-      const user = getCurrentUser();
-      if (user) {
-        partner_name.value = user.name || '';
-        partner_email.value = user.email || '';
-        partner_phone.value = user.phone || '';
-        // location field: fill with geolocation if known
-        partner_location.value = userGeo ? `${userGeo.lat.toFixed(6)}, ${userGeo.lng.toFixed(6)}` : '';
-      }
-      // Store name/phone in quick localStorage for order summary retrieval
-      if (user) {
-        localStorage.setItem('onionn_name', user.name);
-        localStorage.setItem('onionn_phone', user.phone);
-      }
-      // Scroll to order area
-      orderArea.scrollIntoView({behavior:'smooth'});
-    }
-
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-      clearLogged();
-      // show auth & map again
-      authArea.classList.remove('hidden');
-      mapCard.classList.remove('hidden');
-      orderArea.classList.add('hidden');
-      logoutBtn.style.display = 'none';
-      summaryBox.textContent = 'No summary yet.';
-    });
-
-    function getCurrentUser() {
-      const email = getLoggedInEmail();
-      if (!email) return null;
-      const users = getUsers();
-      return users.find(u => u.email === email) || null;
-    }
-
-    // Payment UI logic
-    paymentMode.addEventListener('change', () => {
-      if (paymentMode.value === 'mpesa') {
-        mpesaOptions.classList.remove('hidden');
-      } else {
-        mpesaOptions.classList.add('hidden');
-      }
-    });
-    mpesaType.addEventListener('change', () => {
-      if (mpesaType.value === 'other') mpesaCustomWrap.classList.remove('hidden');
-      else mpesaCustomWrap.classList.add('hidden');
-    });
-
-    // Delivery selection
-    useGeoBtn.addEventListener('click', () => {
-      if (!userGeo) {
-        alert('Geolocation not available. Allow location permission or enter manual location.');
-        return;
-      }
-      manualWrap.classList.add('hidden');
-      manualLocation.value = '';
-      manualLoc = '';
-      alert('Delivery set to your geolocation.');
-    });
-    manualBtn.addEventListener('click', () => {
-      manualWrap.classList.remove('hidden');
-      manualLocation.focus();
-    });
-    manualLocation.addEventListener('input', () => {
-      manualLoc = manualLocation.value.trim();
-    });
-
-    // Preview order summary
-    previewBtn.addEventListener('click', () => {
-      buildSummary();
-    });
-
-    function buildSummary() {
-      const user = getCurrentUser();
-      const name = (localStorage.getItem('onionn_name') || (user ? user.name : ''));
-      const phone = (localStorage.getItem('onionn_phone') || (user ? user.phone : ''));
-      const qty = Number(qtyInput.value) || 0;
-      const total = qty * PRICE_PER_KG;
-      const payment = paymentMode.value;
-      const mpesaT = mpesaType.value;
-      const mpesaNum = mpesaNumber.value.trim();
-      const account = mpesaAccount.value.trim();
-
-      const now = new Date();
-      const timeStr = now.toLocaleString();
-
-      // delivery location
-      let deliveryDesc = '';
-      if (manualLoc) deliveryDesc = manualLoc;
-      else if (userGeo) deliveryDesc = `${userGeo.lat.toFixed(6)}, ${userGeo.lng.toFixed(6)}`;
-      else deliveryDesc = 'Not specified';
-
-      const summary = [
-        `Name: ${name}`,
-        `Phone: ${phone}`,
-        `Order time: ${timeStr}`,
-        `Delivery location: ${deliveryDesc}`,
-        `Quantity: ${qty} Kg`,
-        `Price per Kg: ${PRICE_PER_KG} Ksh`,
-        `Total price: ${total} Ksh`,
-        `Payment method: ${payment === 'mpesa' ? ('M-Pesa (' + mpesaT + (mpesaT==='other' ? (': '+mpesaNum) : '') +')') : 'Payment on delivery'}`,
-        account ? `Payment account: ${account}` : '',
-      ].filter(Boolean).join('');
-
-      summaryBox.textContent = summary;
-      return summary;
-    }
-
-    // Submit order: if Payment ON DELIVERY selected -> send sms (mobile) or email (desktop/tablet)
-    submitOrderBtn.addEventListener('click', async () => {
-      const payment = paymentMode.value;
-      // check delivery selection
-      const hasManual = manualLoc && manualLoc.length > 0;
-      if (!hasManual && !userGeo) {
-        alert('Please select delivery to your geolocation or enter manual delivery location.');
-        return;
-      }
-      const summary = buildSummary();
-      if (payment === 'pod') {
-        // Payment on delivery -> send via sms (mobile) or email (desktop)
-        sendOrderViaExternalLink(summary);
-      } else {
-        alert('For M-Pesa payments, preview your summary and then use the M-Pesa app to complete payment. You may still submit order to seller after payment.');
-        // Offer to send the order too (we'll open mail/sms as above)
-        if (confirm('Also send the order summary to the seller?')) {
-          sendOrderViaExternalLink(summary);
-        }
-      }
-    });
-
-    function isMobile() {
-      // a simple heuristic
-      return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent) || navigator.maxTouchPoints > 0 && window.innerWidth < 900;
-    }
-
-    function sendOrderViaExternalLink(summary) {
-      if (isMobile()) {
-        // use SMS
-        const body = encodeURIComponent(summary);
-        // sms: with body works differently: sms:+number?body=...
-        window.location.href = `sms:${SELLER_PHONE}?body=${body}`;
-      } else {
-        // desktop: use mailto
-        const subject = encodeURIComponent('Onionn Order');
-        const body = encodeURIComponent(summary);
-        window.location.href = `mailto:${SELLER_EMAIL}?subject=${subject}&body=${body}`;
-      }
+    function sendOrderViaExternalLink(summary){
+      if(/Mobi|Android|iPhone/i.test(navigator.userAgent)){window.location.href=`sms:${SELLER_PHONE}?body=${encodeURIComponent(summary)}`;}
+      else{window.location.href=`mailto:${SELLER_EMAIL}?subject=Onionn Order&body=${encodeURIComponent(summary)}`;}
     }
 
     // Partner modal
-    partnerBtn.addEventListener('click', () => {
-      partnerBackdrop.style.display = 'flex';
-      // prefill from logged-in user/localStorage
-      const user = getCurrentUser();
-      if (user) {
-        partner_name.value = user.name || '';
-        partner_email.value = user.email || '';
-        partner_phone.value = user.phone || '';
-      }
-      partner_location.value = userGeo ? `${userGeo.lat.toFixed(6)}, ${userGeo.lng.toFixed(6)}` : '';
-    });
-    partnerCancelBtn.addEventListener('click', () => { partnerBackdrop.style.display = 'none'; });
+    const partnerBackdrop=document.getElementById("partnerBackdrop");
+    document.getElementById("partnerBtn").addEventListener("click",()=>{partnerBackdrop.style.display="flex";});
+    document.getElementById("partnerCancelBtn").addEventListener("click",()=>{partnerBackdrop.style.display="none";});
+    document.getElementById("partnerSubmitBtn").addEventListener("click",()=>{alert("Partner inquiry sent.");partnerBackdrop.style.display="none";});
 
-    partnerSubmitBtn.addEventListener('click', () => {
-      const name = partner_name.value.trim();
-      const email = partner_email.value.trim();
-      const phone = partner_phone.value.trim();
-      const location = partner_location.value.trim();
-      if (!name || !phone || !email) {
-        alert('Please fill name, phone and email.');
-        return;
-      }
-      const summary = `Partner inquiry:\\nName: ${name}\\nPhone: ${phone}\\nEmail: ${email}\\nLocation: ${location || 'Not provided'}`;
-      // send
-      if (isMobile()) {
-        window.location.href = `sms:${SELLER_PHONE}?body=${encodeURIComponent(summary)}`;
-      } else {
-        window.location.href = `mailto:${SELLER_EMAIL}?subject=${encodeURIComponent('Partner Inquiry')} &body=${encodeURIComponent(summary)}`;
-      }
-      partnerBackdrop.style.display = 'none';
-    });
-
-    // On load
-    window.addEventListener('load', () => {
-      initMap();
-      // check logged-in
-      if (getLoggedInEmail()) showLoggedInUI();
-    });
-
-    // simple touch: create sample vendor distances update if user moves
-    // re-place vendors when map clicked (for testing)
-    map && map.on && map.on('click', () => placeVendorsNearUser());
+    window.addEventListener("load",initMap);
   </script>
 </body>
 </html>
