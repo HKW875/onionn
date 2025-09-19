@@ -16,7 +16,7 @@
     h1, h2, p {
     color: black;
     }
-     h1, h2 {
+     h1, h2, label {
      font-family: 'Metropolis', sans-serif;
     }
     :root{
@@ -73,6 +73,9 @@
           <!-- Customer Details -->
           <label for="custName">Customer Name</label>
           <input id="custName" type="text" placeholder="Full Name"/>
+
+          <label for="referredBy">Referred by (optional)</label>
+          <input id="referredBy" style= "font-family: 'metropolis', sans serif;" type="text" placeholder="Name and number"/>
 
           <label for="custPhone">Phone Number</label>
           <input id="custPhone" type="tel" placeholder="07xx xxx xxx"/>
@@ -146,9 +149,11 @@
   <!-- Partner modal -->
   <div id="partnerBackdrop" class="modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);align-items:center;justify-content:center;">
     <div class="modal card" style="max-width:500px;">
-      <h2>Become a farmer Partner</h2>
+      <h2>Become a farmer or Seller Partner</h2>
       <label for="partner_name">Full name</label>
       <input id="partner_name" type="text" />
+      <label for="referred_by">Referred by (optional)</label>
+      <input id="referred_by" type="text" />
       <label for="partner_email">Email</label>
       <input id="partner_email" type="email" />
       <label for="partner_phone">Phone</label>
@@ -157,7 +162,7 @@
       <input id="partner_location" />
       <div style="display:flex;gap:8px;margin-top:12px;">
         <button id="partnerSubmitBtn" class="btn">Send Inquiry</button>
-        <button id="partnerCancelBtn" class="btn ghost">Cancel</button>
+        <button id="partnerCancelBtn" class="btn">Cancel</button>
       </div>
     </div>
   </div>
@@ -223,6 +228,7 @@
       const total=qty*PRICE_PER_KG;
       const now=new Date().toLocaleString();
       const name=document.getElementById("custName").value.trim();
+      const referredBy=document.getElementById("referredBy").value.trim();
       const phone=document.getElementById("custPhone").value.trim();
       const email=document.getElementById("custEmail").value.trim();
       const deliveryTime=document.getElementById("deliveryTime").value.trim();
