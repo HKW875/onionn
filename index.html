@@ -47,6 +47,20 @@
     .btn.ghost{background:transparent;color:var(--brand);border:1px solid var(--brand);}
     .summary{white-space:pre-wrap;background:#f8fafc;padding:12px;border-radius:10px;border:1px dashed var(--border);font-size:13px;}
     .success{color:var(--brand-dark);font-weight:600;margin-top:8px}
+
+    /* WhatsApp icon button */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25D366;
+      color: white;
+      font-size: 28px;
+      border-radius: 50%;
+      padding: 12px 16px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 <body>
@@ -145,6 +159,9 @@
       <div id="message" class="success hidden"></div>
     </div>
   </main>
+
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/254708253594" target="_blank" class="whatsapp-btn">💬</a>
 
   <!-- Partner modal -->
   <div id="partnerBackdrop" class="modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);align-items:center;justify-content:center;">
