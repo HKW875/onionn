@@ -9,18 +9,19 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 
   <style>
+    /* --- unchanged app styles (kept as before) --- */
     #submitOrderBtn {
-    background-color: #27b02e;
-    color: white; /* optional to keep text visible */
+      background-color: #27b02e;
+      color: white;
     }
     h1, h2, p {
-    color: black;
+      color: black;
     }
-     h1, h2, label {
-     font-family: 'Metropolis', sans-serif;
+    h1, h2, label {
+      font-family: 'Metropolis', sans-serif;
     }
     :root{
-      --brand:#27b02e; 
+      --brand:#27b02e;
       --brand-dark:#0f7c36;
       --ink:#27b02e;
       --muted:#6b7280;
@@ -61,9 +62,119 @@
       text-decoration: none;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
+
+    /* --- Popup styles (updated with green background, graphics, smaller text, shake, close) --- */
+    #referPopup {
+      display: none; /* shown on load via JS */
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    /* Square popup content */
+    #referPopupContent {
+      width: 320px;
+      height: 320px;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #ffffff;
+      box-shadow: 0 12px 40px rgba(2,6,23,0.45);
+      cursor: default;
+      /* layered green gradients */
+      background:
+        linear-gradient(180deg, rgba(6,95,70,0.95), rgba(34,197,94,0.95)),
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 15%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.03), transparent 12%);
+      -webkit-backdrop-filter: blur(0px);
+      backdrop-filter: blur(0px);
+    }
+
+    /* subtle money-splash SVG overlay for 'beautiful graphics' - embedded as data URI */
+    #referPopupContent::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 800'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='%23ffffff' stop-opacity='0.08'/><stop offset='1' stop-color='%23ffffff' stop-opacity='0.02'/></linearGradient></defs><g fill='none' stroke='url(%23g)' stroke-width='2' opacity='0.6'><path d='M120 580c60-40 120-90 220-60 100 30 180-20 260-30 80-10 140 60 180 80'/><path d='M80 200c60 40 110 110 210 120 100 10 170-50 260-40 90 10 140 80 180 110'/><path d='M40 420c50-60 130-90 220-70 90 20 160 0 250-30 90-30 170 20 210 40' /></g><g fill='%23fff' fill-opacity='0.07'><circle cx='50' cy='50' r='20'/><circle cx='760' cy='100' r='24'/><circle cx='720' cy='700' r='28'/></g></svg>");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 140% 140%;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      transform: translateZ(0);
+    }
+
+    /* Title text - reduced by 20% vs 22px -> 17.6px (we use 17.6px) */
+    #referPopupContent .popup-text{
+      position: relative;
+      z-index: 2;
+      font-family: 'Metropolis', sans-serif;
+      font-weight: 800;
+      font-size: 17.6px;
+      line-height: 1.2;
+      padding: 8px 18px;
+      letter-spacing: 0.2px;
+      -webkit-font-smoothing: antialiased;
+      animation: subtle-shake 1.2s infinite ease-in-out;
+      transform-origin: 50% 50%;
+    }
+
+    /* Slight, tasteful shake (small amplitude) */
+    @keyframes subtle-shake {
+      0% { transform: translateX(0) rotate(0.0deg); }
+      15% { transform: translateX(-2px) rotate(-0.2deg); }
+      30% { transform: translateX(2px) rotate(0.2deg); }
+      45% { transform: translateX(-1.4px) rotate(-0.1deg); }
+      60% { transform: translateX(1.4px) rotate(0.1deg); }
+      75% { transform: translateX(-0.8px) rotate(-0.05deg); }
+      100% { transform: translateX(0) rotate(0); }
+    }
+
+    /* Close button */
+    #referPopupContent .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 3;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.95);
+      color: #0f7c36;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 12px rgba(2,6,23,0.2);
+    }
+    #referPopupContent .close-btn:active { transform: scale(0.98); }
+
+    /* Make sure popup text is readable on small screens */
+    @media (max-width:420px){
+      #referPopupContent { width: 86vw; height: 86vw; }
+      #referPopupContent .popup-text { font-size: 16px; padding: 10px; }
+    }
   </style>
 </head>
 <body>
+  <!-- Popup (square) -->
+  <div id="referPopup" aria-hidden="true">
+    <div id="referPopupContent" role="dialog" aria-label="Referral offer">
+      <button class="close-btn" id="closePopup" aria-label="Close popup">&times;</button>
+      <div class="popup-text">Earn 2000/= every time you refer a farmer anywhere in Kenya and they become a farmer partner</div>
+    </div>
+  </div>
+
   <header>
     <div class="logo"><div class="mark">🧅</div>Onionn</div>
   </header>
@@ -194,6 +305,22 @@
     const SELLER_EMAIL = 'wambuguhkw@gmail.com';
     const VENDOR_COUNT = 6;
 
+    // Show popup on load
+    window.addEventListener("load", () => {
+      const popup = document.getElementById("referPopup");
+      if (popup) popup.style.display = "flex";
+      initMap();
+    });
+
+    // Close popup
+    const closeBtn = document.getElementById("closePopup");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        const popup = document.getElementById("referPopup");
+        if (popup) popup.style.display = "none";
+      });
+    }
+
     // Clear user data
     document.getElementById("logoutDataBtn").addEventListener("click", () => {
       localStorage.clear();
@@ -284,8 +411,6 @@ Send Copy to Customer Email: ${sendCopy}`;
     document.getElementById("partnerBtn").addEventListener("click",()=>{partnerBackdrop.style.display="flex";});
     document.getElementById("partnerCancelBtn").addEventListener("click",()=>{partnerBackdrop.style.display="none";});
     document.getElementById("partnerSubmitBtn").addEventListener("click",()=>{alert("Partner inquiry sent.");partnerBackdrop.style.display="none";});
-
-    window.addEventListener("load",initMap);
   </script>
 </body>
 </html>
