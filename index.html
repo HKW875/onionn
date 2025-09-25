@@ -408,9 +408,68 @@ Send Copy to Customer Email: ${sendCopy}`;
 
     // Partner modal
     const partnerBackdrop=document.getElementById("partnerBackdrop");
-    document.getElementById("partnerBtn").addEventListener("click",()=>{partnerBackdrop.style.display="flex";});
-    document.getElementById("partnerCancelBtn").addEventListener("click",()=>{partnerBackdrop.style.display="none";});
-    document.getElementById("partnerSubmitBtn").addEventListener("click",()=>{alert("Partner inquiry sent.");partnerBackdrop.style.display="none";});
+    const partnerBtnElem = document.getElementById("partnerBtn");
+    const partnerCancelBtn = document.getElementById("partnerCancelBtn");
+    const partnerSubmitBtn = document.getElementById("partnerSubmitBtn");
+
+    // NEW: geolocation input element (added to the form above)
+    // We'll reference it here:
+    // Note: element exists in DOM as <input id="partner_geolocation" />
+    // If it doesn't exist for any reason, the code will fail gracefully.
+    partnerBtnElem.addEventListener("click",()=>{
+      partnerBackdrop.style.display="flex";
+
+      // Try to auto-detect geolocation and populate the new partner_geolocation input.
+      const geoInput = document.getElementById("partner_geolocation");
+      if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(pos=>{
+          if (geoInput) geoInput.value = `${pos.coords.latitude.toFixed(6)},${pos.coords.longitude.toFixed(6)}`;
+        }, err=>{
+          if (geoInput) geoInput.value = "";
+          alert("⚠️ Could not detect location. Geolocation is required to become a partner. Please allow location access and click 'Become a Partner' again, or reload the page and allow location.");
+        }, {enableHighAccuracy:true, timeout:10000});
+      } else {
+        if (geoInput) geoInput.value = "";
+        alert("⚠️ Geolocation not supported by your browser. The partner form requires geolocation.");
+      }
+    });
+
+    partnerCancelBtn.addEventListener("click",()=>{partnerBackdrop.style.display="none";});
+    partnerSubmitBtn.addEventListener("click",()=>{
+      const pName = document.getElementById("partner_name").value.trim();
+      const pReferred = document.getElementById("referred_by").value.trim();
+      const pEmail = document.getElementById("partner_email").value.trim();
+      const pPhone = document.getElementById("partner_phone").value.trim();
+      const pLocation = document.getElementById("partner_location").value.trim();
+      const pFarmSize = document.getElementById("farm_size").value.trim();
+      const pGeo = (document.getElementById("partner_geolocation") && document.getElementById("partner_geolocation").value) ? document.getElementById("partner_geolocation").value.trim() : "";
+
+      // Require both geolocation and farm location (both mandatory and separate)
+      if(!pGeo){
+        alert("❌ Geolocation is required. Please allow location access when prompted and open the Become a Partner form again.");
+        return;
+      }
+      if(!pLocation){
+        alert("❌ Farm Location (manual) is required. Please enter your farm location.");
+        return;
+      }
+
+      // Build partner inquiry summary including the geolocation and farm location so it can be sent via email
+      const partnerSummary = `Partner inquiry:
+Name: ${pName}
+Referred by: ${pReferred}
+Email: ${pEmail}
+Phone: ${pPhone}
+Geolocation: ${pGeo}
+Farm Location: ${pLocation}
+Farm size (acres): ${pFarmSize}`;
+
+      // Send partner inquiry via mailto with the summary in the email body
+      window.location.href = `mailto:${SELLER_EMAIL}?subject=${encodeURIComponent("Partner inquiry")}&body=${encodeURIComponent(partnerSummary)}`;
+
+      alert("Partner inquiry sent.");
+      partnerBackdrop.style.display="none";
+    });
   </script>
 </body>
 </html>
