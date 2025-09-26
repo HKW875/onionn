@@ -53,7 +53,7 @@ self.addEventListener('fetch', event => {
         });
       }).catch(() => {
         // if it's an image request, maybe respond with an icon
-        if (event.request.destination === 'image') return caches.match('./icons/icon-192.png');
+        if (event.request.destination === 'image') return caches.match('./icons/android-launchericon-192-192.png');
         return caches.match('./offline.html');
       });
     })
