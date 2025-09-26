@@ -4,8 +4,8 @@ const PRECACHE_URLS = [
   './',
   './index.html',
   './offline.html',
-  './icons/icon-192.jpg',
-  './icons/icon-512.jpg'
+  './icons/android-launchericon-192-192.png',
+  './icons/android-launchericon-512-512.png'
 ];
 
 // Install: cache core files
