@@ -311,7 +311,62 @@
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
   <script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging.js"></script>
+  
+  <script>
+    // Your Firebase config (from Firebase console)
+    const firebaseConfig = {
+    apiKey: "AIzaSyDMc-z5-FwlbWwDt_dWdbk82SLpm9GCE38",
+    authDomain: "onionn-790da.firebaseapp.com",
+    projectId: "onionn-790da",
+    storageBucket: "onionn-790da.firebasestorage.app",
+    messagingSenderId: "838790352647",
+    appId: "1:838790352647:web:8d263b00650740b4157fa2"
+  };
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
+
+  // Ask permission
+  Notification.requestPermission().then((permission) => {
+    if (permission === "granted") {
+      messaging.getToken({ vapidKey: "BGbDQGlbmHp5dTASrxeci8z4N_jj3fuACSrFWlf320bNKko3riY_ebv70buYP5jcNbwH4lTDWWJCFXcWPQOIdyM" }).then((token) => {
+        console.log("FCM Token:", token);
+        // send this token to your server to send pushes later
+      });
+    }
+  });
+
+
+  // Import Firebase scripts
+  importScripts("https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js");
+  importScripts("https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging.js");
+
+  // Your Firebase config
+  firebase.initializeApp({
+    apiKey: "AIzaSyDMc-z5-FwlbWwDt_dWdbk82SLpm9GCE38",
+    authDomain: "onionn-790da.firebaseapp.com",
+    projectId: "onionn-790da",
+    storageBucket: "onionn-790da.firebasestorage.app",
+    messagingSenderId: "838790352647",
+    appId: "1:838790352647:web:8d263b00650740b4157fa2"
+  });
+
+  const messaging = firebase.messaging();
+
+  // Background notification handler
+  messaging.onBackgroundMessage((payload) => {
+    self.registration.showNotification(payload.notification.title, {
+      body: payload.notification.body,
+      icon: "/icons/android-launchericon-192-192.png"
+    });
+  });
+
+    
     const PRICE_PER_KG = 50;
     const SELLER_PHONE = '+254708253594';
     const SELLER_EMAIL = 'wambuguhkw@gmail.com';
