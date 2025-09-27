@@ -335,7 +335,7 @@
     // Ask permission and get token
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
-        messaging.getToken({ vapidKey: "BGbDQGlbmHp5dTASrxeci8z4N_jj3fuACSrFWlf320bNKko3riY_ebv70buYP5jcNbwH4lTDWWJCFXcWPQOIdyM" })
+        messaging.getToken({ vapidKey: "BGbDQGlbmHp5dTASrxeci8z4N_jj3fuACSrFWlf320bNKko3riY_ebv7" })
           .then((token) => {
             console.log("FCM Token:", token);
             // send this token to your server for later use
